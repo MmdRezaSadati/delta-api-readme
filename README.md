@@ -4,7 +4,6 @@
 
 This project provides a comprehensive API for managing real estate properties, along with additional features such as house reservations, user comments, blog posts, user management, and more. The API is implemented using **Node.js**, **Express.js**, and **TypeScript**. Additionally, Sequelize is used as the ORM for database interactions.
 
-
 # Technical Details
 
 ## List of Endpoints and Their Descriptions
@@ -69,7 +68,7 @@ This project provides a comprehensive API for managing real estate properties, a
 
 ---
 
-### 4. **Comments**
+### 4. **Comments & Ratings**
 
 - **GET /api/comments**  
   Retrieve all comments with filtering support based on house_id, user_id, or rating.
@@ -78,17 +77,40 @@ This project provides a comprehensive API for managing real estate properties, a
   Retrieve details of a specific comment by its ID.
 
 - **POST /api/comments**  
-  Create a new comment.
+  Create a new comment and rating.
 
 - **PUT /api/comments/:id**  
-  Update a comment.
+  Update a comment or rating.
 
 - **DELETE /api/comments/:id**  
   Delete a comment by its ID.
 
 ---
 
-### 5. **Blogs**
+### 5. **Payment & Reservations**
+
+- **POST /api/payments/checkout**  
+  Initiate a payment for a booking.
+
+- **GET /api/payments/status/:transactionId**  
+  Check the payment status of a transaction.
+
+- **POST /api/payments/verify**  
+  Verify a payment after a successful transaction.
+
+---
+
+### 6. **Dashboard & Analytics**
+
+- **GET /api/dashboard/summary**  
+  Retrieve an overview of houses, users, bookings, and average rating.
+
+- **GET /api/dashboard/reports**  
+  Retrieve various analytical reports on user activity and bookings.
+
+---
+
+### 7. **Blogs**
 
 - **GET /api/blogs**  
   Retrieve all blog posts with filtering support based on title, author_id, or category_id.
@@ -107,7 +129,7 @@ This project provides a comprehensive API for managing real estate properties, a
 
 ---
 
-### 6. **Categories**
+### 8. **Categories**
 
 - **GET /api/categories**  
   Retrieve all categories.
@@ -126,57 +148,16 @@ This project provides a comprehensive API for managing real estate properties, a
 
 ---
 
-### 7. **Accommodations**
+### 9. **Admin Dashboard**
 
-- **GET /api/accommodations**  
-  Retrieve all accommodations or features of a house with filtering support (e.g., house_id or facility).
+- **GET /api/admin/users**  
+  Retrieve a list of all users with filtering and pagination.
 
-- **GET /api/accommodations/:id**  
-  Retrieve details of a specific accommodation by its ID.
+- **GET /api/admin/bookings**  
+  Retrieve all bookings with administrative controls.
 
-- **POST /api/accommodations**  
-  Create a new accommodation.
-
-- **PUT /api/accommodations/:id**  
-  Update an accommodation.
-
-- **DELETE /api/accommodations/:id**  
-  Delete an accommodation by its ID.
-
----
-
-### 8. **Contact Us**
-
-- **GET /api/contact-us**  
-  Retrieve all contact messages with filtering support based on title.
-
-- **GET /api/contact-us/:id**  
-  Retrieve details of a specific contact message by its ID.
-
-- **POST /api/contact-us**  
-  Submit a new contact message.
-
-- **DELETE /api/contact-us/:id**  
-  Delete a contact message by its ID.
-
----
-
-### 9. **Discount Codes**
-
-- **GET /api/discount-codes**  
-  Retrieve all discount codes with filtering support based on code or discount_percentage.
-
-- **GET /api/discount-codes/:id**  
-  Retrieve details of a specific discount code by its ID.
-
-- **POST /api/discount-codes**  
-  Create a new discount code.
-
-- **PUT /api/discount-codes/:id**  
-  Update a discount code.
-
-- **DELETE /api/discount-codes/:id**  
-  Delete a discount code by its ID.
+- **GET /api/admin/houses**  
+  Retrieve all properties with detailed administrative data.
 
 ---
 
@@ -230,3 +211,4 @@ This project provides a comprehensive API for managing real estate properties, a
   Delete a social media link by its ID.
 
 ---
+
