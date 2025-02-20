@@ -148,19 +148,6 @@ This project provides a comprehensive API for managing real estate properties, a
 
 ---
 
-### 9. **Admin Dashboard**
-
-- **GET /api/admin/users**  
-  Retrieve a list of all users with filtering and pagination.
-
-- **GET /api/admin/bookings**  
-  Retrieve all bookings with administrative controls.
-
-- **GET /api/admin/houses**  
-  Retrieve all properties with detailed administrative data.
-
----
-
 ### 10. **Favorites**
 
 - **POST /api/favorites/add**  
