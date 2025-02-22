@@ -1,83 +1,53 @@
-Below is an example of a very detailed README.md file for your Real Estate API project. This documentation covers all endpoints, input parameters, sample requests/responses, and usage scenarios. You can adjust it as needed before publishing on GitHub.
+Below is a comprehensive API documentation in Markdown format intended for frontend developers. This document details every API endpoint, its parameters, expected inputs/outputs, and usage scenarios without including installation or frontend integration instructions.
 
 ---
 
 ```markdown
-# Real Estate API Project Documentation
+# Real Estate API Documentation
 
 ## Introduction
 
-This project provides a comprehensive API for managing real estate properties along with additional features such as house reservations, user comments & ratings, blog posts, user management, payment processing, advanced geo-search, real-time notifications, chat functionality, and social integration. The API is implemented using **Node.js**, **Express.js**, and **TypeScript**. Sequelize is used as the ORM for database interactions.
+This API provides a comprehensive set of endpoints for managing real estate properties, bookings, user interactions, payments, and more. The API supports advanced features such as geo-search, real-time notifications, social authentication, intelligent recommendations, and a gamification system. This documentation describes each endpoint, the required parameters, and scenarios so that frontend developers have a complete understanding of how to interact with the backend.
+
+---
 
 ## Table of Contents
 
-- [Technical Overview](#technical-overview)
-- [Authentication & Authorization](#authentication--authorization)
-- [Endpoints](#endpoints)
-  - [Properties (Houses)](#1-properties-houses)
-  - [Users](#2-users)
-  - [Bookings](#3-bookings)
-  - [Comments & Ratings](#4-comments--ratings)
-  - [Payment & Reservations](#5-payment--reservations)
-  - [Blogs](#6-blogs)
-  - [Categories](#7-categories)
-  - [Favorites](#8-favorites)
-  - [Locations](#9-locations)
-  - [Social Media Links](#10-social-media-links)
-  - [Social Authentication](#11-social-authentication)
-  - [Social Sharing](#12-social-sharing)
-  - [Advanced Geo-Search](#13-advanced-geo-search)
-  - [Real-time Notifications & Chat](#14-real-time-notifications--chat)
-  - [Advanced Reporting (Dashboard)](#15-advanced-reporting-dashboard)
-  - [User Profile Management](#16-user-profile-management)
-- [Setup & Installation](#setup--installation)
-- [Usage Examples](#usage-examples)
-- [Future Enhancements](#future-enhancements)
+1. [Properties (Houses)](#1-properties-houses)
+2. [Users](#2-users)
+3. [Bookings](#3-bookings)
+4. [Comments & Ratings / Feedback](#4-comments--ratings--feedback)
+5. [Payment & Reservations](#5-payment--reservations)
+6. [Blogs](#6-blogs)
+7. [Categories](#7-categories)
+8. [Favorites](#8-favorites)
+9. [Locations](#9-locations)
+10. [Social Media Links](#10-social-media-links)
+11. [Social Authentication](#11-social-authentication)
+12. [Social Sharing](#12-social-sharing)
+13. [Advanced Geo-Search](#13-advanced-geo-search)
+14. [Real-time Notifications & Chat](#14-real-time-notifications--chat)
+15. [Advanced Reporting (Dashboard)](#15-advanced-reporting-dashboard)
+16. [User Profile Management](#16-user-profile-management)
+17. [Recommendation System](#17-recommendation-system)
+18. [Gamification & Feedback](#18-gamification--feedback)
 
 ---
 
-## Technical Overview
+## 1. Properties (Houses)
 
-- **Backend Framework:** Node.js with Express.js  
-- **Language:** TypeScript  
-- **ORM:** Sequelize  
-- **Real-time Communication:** Socket.IO  
-- **Authentication:** JWT with refresh tokens and Passport.js for social login  
-- **Database:** PostgreSQL (recommended with PostGIS for geo-search)  
-- **Other Technologies:** express-validator for input validation
+### **GET /api/houses**
 
----
-
-## Authentication & Authorization
-
-- **JWT Authentication:** The API uses JWT tokens for user authentication. An access token (short-lived) and a refresh token (long-lived) are issued upon successful login.
-- **Social Authentication:** Users can also authenticate via social networks (Facebook, Google, LinkedIn) using Passport.js strategies.
-- **Role-Based Access:** Certain endpoints (e.g., admin dashboard, advanced reporting) are restricted to users with the `admin` role. Middleware (`authenticateToken` and `authorizeRoles`) ensures that only authorized users can access these endpoints.
-
----
-
-## Endpoints
-
-Below is a detailed description of each endpoint category, including the HTTP method, URL, required parameters, sample requests/responses, and usage scenarios.
-
----
-
-### 1. Properties (Houses)
-
-#### **GET /api/houses**
-
-- **Description:**  
-  Retrieve all houses with filtering, pagination, and sorting.
+- **Description:** Retrieve all houses with support for filtering, pagination, and sorting.
 - **Query Parameters:**
-  - `page` (optional, default: "1") – Page number for pagination.
-  - `limit` (optional, default: "10") – Number of houses per page.
-  - `sort` (optional) – Field to sort by (e.g., "price", "rate").
-  - `order` (optional, default: "ASC") – Sorting order ("ASC" or "DESC").
+  - `page` (optional, default: "1"): Page number.
+  - `limit` (optional, default: "10"): Number of records per page.
+  - `sort` (optional): Field name to sort (e.g., "price", "rate").
+  - `order` (optional, default: "ASC"): Sorting order ("ASC" or "DESC").
   - Additional filters: `title`, `address`, `rate`, `price`, `capacity`, `transaction_type`.
-- **Sample Request:**
-  ```
-  GET /api/houses?page=1&limit=10&sort=price&order=DESC&transaction_type=rental
-  ```
+- **Scenario:** Used to display a list of properties to users based on specific criteria (e.g., show all rental properties sorted by price descending).
+- **Sample Request:**  
+  `GET /api/houses?page=1&limit=10&sort=price&order=DESC&transaction_type=rental`
 - **Sample Response:**
   ```json
   [
@@ -89,44 +59,24 @@ Below is a detailed description of each endpoint category, including the HTTP me
       "price": 1200,
       "capacity": 4,
       "transaction_type": "rental",
-      ...
+      "createdAt": "2023-01-01T00:00:00.000Z"
     },
     ...
   ]
   ```
 
-#### **GET /api/houses/:id**
+### **GET /api/houses/:id**
 
-- **Description:**  
-  Retrieve detailed information about a specific house by its ID.
-- **URL Parameter:**
-  - `id` – ID of the house.
-- **Sample Request:**
-  ```
-  GET /api/houses/1
-  ```
+- **Description:** Retrieve detailed information about a specific house.
+- **URL Parameter:**  
+  - `id`: The house's unique identifier.
+- **Scenario:** When a user selects a property, this endpoint provides all details for that property.
+- **Sample Request:**  
+  `GET /api/houses/1`
 - **Sample Response:**
   ```json
   {
     "id": 1,
-    "title": "Modern Apartment",
-    "address": "123 Main St",
-    "rate": 4.5,
-    "price": 1200,
-    "capacity": 4,
-    "transaction_type": "rental",
-    "createdAt": "2023-01-01T00:00:00.000Z",
-    ...
-  }
-  ```
-
-#### **POST /api/houses**
-
-- **Description:**  
-  Create a new house.
-- **Request Body (JSON):**
-  ```json
-  {
     "title": "Modern Apartment",
     "address": "123 Main St",
     "rate": 4.5,
@@ -134,9 +84,26 @@ Below is a detailed description of each endpoint category, including the HTTP me
     "capacity": 4,
     "transaction_type": "rental",
     "photos": ["photo1.jpg", "photo2.jpg"],
-    ...
+    "createdAt": "2023-01-01T00:00:00.000Z"
   }
   ```
+
+### **POST /api/houses**
+
+- **Description:** Create a new house.
+- **Request Body:** (JSON)
+  ```json
+  {
+    "title": "Modern Apartment",
+    "address": "123 Main St",
+    "rate": 4.5,
+    "price": 1200,
+    "capacity": 4,
+    "transaction_type": "rental",
+    "photos": ["photo1.jpg", "photo2.jpg"]
+  }
+  ```
+- **Scenario:** Used by property managers or sellers to add a new property.
 - **Sample Response:**
   ```json
   {
@@ -147,24 +114,23 @@ Below is a detailed description of each endpoint category, including the HTTP me
     "price": 1200,
     "capacity": 4,
     "transaction_type": "rental",
-    "createdAt": "2023-01-01T00:00:00.000Z",
-    ...
+    "createdAt": "2023-01-01T00:00:00.000Z"
   }
   ```
 
-#### **PUT /api/houses/:id**
+### **PUT /api/houses/:id**
 
-- **Description:**  
-  Update house information.
+- **Description:** Update the details of an existing house.
 - **URL Parameter:**  
-  - `id` – ID of the house.
-- **Request Body (JSON):**
+  - `id`: The house's unique identifier.
+- **Request Body:** (JSON)
   ```json
   {
     "price": 1300,
     "capacity": 5
   }
   ```
+- **Scenario:** Used for correcting or updating property details.
 - **Sample Response:**
   ```json
   {
@@ -175,17 +141,16 @@ Below is a detailed description of each endpoint category, including the HTTP me
     "price": 1300,
     "capacity": 5,
     "transaction_type": "rental",
-    "updatedAt": "2023-02-01T00:00:00.000Z",
-    ...
+    "updatedAt": "2023-02-01T00:00:00.000Z"
   }
   ```
 
-#### **DELETE /api/houses/:id**
+### **DELETE /api/houses/:id**
 
-- **Description:**  
-  Delete a house.
+- **Description:** Delete a house by its ID.
 - **URL Parameter:**  
-  - `id` – ID of the house.
+  - `id`: The house's unique identifier.
+- **Scenario:** Allows property managers to remove properties that are no longer available.
 - **Sample Response:**
   ```json
   { "message": "House deleted successfully" }
@@ -193,13 +158,12 @@ Below is a detailed description of each endpoint category, including the HTTP me
 
 ---
 
-### 2. Users
+## 2. Users
 
-#### **POST /api/users/register**
+### **POST /api/users/register**
 
-- **Description:**  
-  Register a new user.
-- **Request Body (JSON):**
+- **Description:** Register a new user.
+- **Request Body:** (JSON)
   ```json
   {
     "email": "user@example.com",
@@ -208,6 +172,7 @@ Below is a detailed description of each endpoint category, including the HTTP me
     "name": "John Doe"
   }
   ```
+- **Scenario:** Used during user signup.
 - **Sample Response:**
   ```json
   {
@@ -215,55 +180,48 @@ Below is a detailed description of each endpoint category, including the HTTP me
     "email": "user@example.com",
     "role": "buyer",
     "name": "John Doe",
-    "createdAt": "2023-01-01T00:00:00.000Z",
-    ...
+    "createdAt": "2023-01-01T00:00:00.000Z"
   }
   ```
 
-#### **POST /api/users/login**
+### **POST /api/users/login**
 
-- **Description:**  
-  User login. Returns a JWT token on successful authentication.
-- **Request Body (JSON):**
+- **Description:** Authenticate a user and return JWT tokens.
+- **Request Body:** (JSON)
   ```json
   {
     "email": "user@example.com",
     "password": "securePassword"
   }
   ```
+- **Scenario:** User logs in and receives an access token (for short-term access) and a refresh token (for obtaining new access tokens).
 - **Sample Response:**
   ```json
-  { "token": "jwt_token_here" }
+  { "accessToken": "jwt_access_token", "refreshToken": "jwt_refresh_token" }
   ```
 
-#### **GET /api/users**
+### **GET /api/users**
 
-- **Description:**  
-  Retrieve all users with filtering support.
+- **Description:** Retrieve all users, with optional filtering by role or registration date.
 - **Query Parameters:**  
-  - Filtering by `role`, `membership_date`, etc.
-- **Sample Request:**
-  ```
-  GET /api/users?role=buyer&page=1&limit=10
-  ```
+  - `role` (optional)
+  - `membership_date` (optional)
+  - `page`, `limit` for pagination.
+- **Scenario:** Admin or user management view.
 - **Sample Response:**
   ```json
   [
-    { "id": 1, "email": "user@example.com", "role": "buyer", ... },
+    { "id": 1, "email": "user@example.com", "role": "buyer", "name": "John Doe" },
     ...
   ]
   ```
 
-#### **GET /api/users/:id**
+### **GET /api/users/:id**
 
-- **Description:**  
-  Retrieve details of a specific user.
+- **Description:** Retrieve details of a specific user.
 - **URL Parameter:**  
-  - `id` – User ID.
-- **Sample Request:**
-  ```
-  GET /api/users/1
-  ```
+  - `id`: The user’s unique identifier.
+- **Scenario:** For displaying a user’s full profile (private or public as defined).
 - **Sample Response:**
   ```json
   {
@@ -274,38 +232,38 @@ Below is a detailed description of each endpoint category, including the HTTP me
     "profile": {
       "address": "123 Main St",
       "phone": "09123456789",
-      "buyingHistory": [...],
-      "sellingHistory": [...]
-    },
-    ...
+      "buyingHistory": [],
+      "sellingHistory": []
+    }
   }
   ```
 
-#### **PUT /api/users/:id**
+### **PUT /api/users/:id**
 
-- **Description:**  
-  Update a user's information. If the password is provided, it is re-hashed.
-- **Request Body (JSON):**
+- **Description:** Update a user's information.
+- **Request Body:** (JSON)
   ```json
   {
     "name": "John Doe Updated",
     "password": "newSecurePassword"
   }
   ```
+- **Scenario:** Allows users to update their personal details.
 - **Sample Response:**
   ```json
   {
     "id": 1,
     "email": "user@example.com",
-    "name": "John Doe Updated",
-    ...
+    "name": "John Doe Updated"
   }
   ```
 
-#### **DELETE /api/users/:id**
+### **DELETE /api/users/:id**
 
-- **Description:**  
-  Delete a user by their ID.
+- **Description:** Delete a user.
+- **URL Parameter:**  
+  - `id`: The user's unique identifier.
+- **Scenario:** Used by admin for user removal.
 - **Sample Response:**
   ```json
   { "message": "User deleted successfully" }
@@ -313,42 +271,37 @@ Below is a detailed description of each endpoint category, including the HTTP me
 
 ---
 
-### 3. Bookings
+## 3. Bookings
 
-#### **GET /api/bookings**
+### **GET /api/bookings**
 
-- **Description:**  
-  Retrieve all bookings with filtering, pagination, and sorting.
-- **Sample Request:**
-  ```
-  GET /api/bookings?page=1&limit=10&house_id=2
-  ```
+- **Description:** Retrieve all bookings with filtering, pagination, and sorting.
+- **Query Parameters:**  
+  - `house_id` (optional) – filter by property.
+  - `page`, `limit`, `sort`, `order` for pagination and sorting.
+- **Scenario:** Display booking history for users or admin.
 - **Sample Response:**
   ```json
   [
-    { "id": 1, "house_id": 2, "reservedDates": ["2023-05-01", "2023-05-10"], ... },
+    { "id": 1, "house_id": 2, "reservedDates": ["2023-05-01", "2023-05-10"], "traveler_details": { "name": "Alice" } },
     ...
   ]
   ```
 
-#### **GET /api/bookings/:id**
+### **GET /api/bookings/:id**
 
-- **Description:**  
-  Retrieve details of a specific booking.
-- **Sample Request:**
-  ```
-  GET /api/bookings/1
-  ```
+- **Description:** Retrieve details of a specific booking.
+- **URL Parameter:**  
+  - `id`: The booking's unique identifier.
 - **Sample Response:**
   ```json
-  { "id": 1, "house_id": 2, "reservedDates": ["2023-05-01", "2023-05-10"], ... }
+  { "id": 1, "house_id": 2, "reservedDates": ["2023-05-01", "2023-05-10"], "traveler_details": { "name": "Alice" } }
   ```
 
-#### **POST /api/bookings**
+### **POST /api/bookings**
 
-- **Description:**  
-  Create a new booking.
-- **Request Body (JSON):**
+- **Description:** Create a new booking.
+- **Request Body:** (JSON)
   ```json
   {
     "house_id": 2,
@@ -356,22 +309,21 @@ Below is a detailed description of each endpoint category, including the HTTP me
     "traveler_details": { "name": "Alice", "contact": "09123456789" }
   }
   ```
+- **Scenario:** When a user reserves a property.
 - **Sample Response:**
   ```json
   {
     "id": 1,
     "house_id": 2,
     "reservedDates": ["2023-05-01", "2023-05-10"],
-    "traveler_details": { "name": "Alice", "contact": "09123456789" },
-    ...
+    "traveler_details": { "name": "Alice", "contact": "09123456789" }
   }
   ```
 
-#### **PUT /api/bookings/:id**
+### **PUT /api/bookings/:id**
 
-- **Description:**  
-  Update booking information.
-- **Request Body (JSON):**
+- **Description:** Update an existing booking.
+- **Request Body:** (JSON)
   ```json
   {
     "reservedDates": ["2023-05-02", "2023-05-12"]
@@ -379,13 +331,12 @@ Below is a detailed description of each endpoint category, including the HTTP me
   ```
 - **Sample Response:**
   ```json
-  { "id": 1, "house_id": 2, "reservedDates": ["2023-05-02", "2023-05-12"], ... }
+  { "id": 1, "house_id": 2, "reservedDates": ["2023-05-02", "2023-05-12"] }
   ```
 
-#### **DELETE /api/bookings/:id**
+### **DELETE /api/bookings/:id**
 
-- **Description:**  
-  Delete a booking by its ID.
+- **Description:** Delete a booking.
 - **Sample Response:**
   ```json
   { "message": "Booking deleted successfully" }
@@ -393,118 +344,86 @@ Below is a detailed description of each endpoint category, including the HTTP me
 
 ---
 
-### 4. Comments & Ratings
+## 4. Comments & Ratings / Feedback
 
-#### **GET /api/comments**
+### **POST /api/feedback**
 
-- **Description:**  
-  Retrieve all comments with filtering support based on house_id, user_id, or rating.
-- **Sample Request:**
+- **Description:** Create a new feedback entry which includes both a comment and a loyalty (rating/points) value.
+- **Request Body:** (JSON)
+  ```json
+  {
+    "reviewerId": 2,
+    "revieweeId": 3,
+    "rating": 4.5,
+    "comment": "Great transaction!",
+    "pointsAwarded": 10
+  }
   ```
-  GET /api/comments?house_id=1&page=1&limit=10
+- **Scenario:** A seller leaves feedback for a buyer (or vice versa), awarding loyalty points.
+- **Sample Response:**
+  ```json
+  {
+    "id": 1,
+    "reviewerId": 2,
+    "revieweeId": 3,
+    "rating": 4.5,
+    "comment": "Great transaction!",
+    "pointsAwarded": 10,
+    "createdAt": "2023-03-01T00:00:00.000Z"
+  }
   ```
+
+### **GET /api/feedback/received/:userId**
+
+- **Description:** Retrieve all feedback received by a specific user along with the total loyalty points earned.
+- **URL Parameter:**  
+  - `userId`: The ID of the user receiving feedback.
+- **Sample Response:**
+  ```json
+  {
+    "feedbacks": [
+      { "id": 1, "rating": 4.5, "comment": "Great transaction!", "pointsAwarded": 10 },
+      ...
+    ],
+    "totalPoints": 10
+  }
+  ```
+
+### **GET /api/feedback/given/:userId**
+
+- **Description:** Retrieve all feedback given by a specific user.
+- **URL Parameter:**  
+  - `userId`: The ID of the user who provided feedback.
 - **Sample Response:**
   ```json
   [
-    { "id": 1, "house_id": 1, "user_id": 2, "rating": 4.5, "comment": "Great property!", ... },
+    { "id": 1, "rating": 4.5, "comment": "Great transaction!", "pointsAwarded": 10 },
     ...
   ]
   ```
 
-#### **GET /api/comments/:id**
+### **GET /api/feedback/loyalty/:userId**
 
-- **Description:**  
-  Retrieve details of a specific comment.
-- **Sample Request:**
-  ```
-  GET /api/comments/1
-  ```
+- **Description:** Retrieve aggregated loyalty points for a user.
+- **URL Parameter:**  
+  - `userId`: The user's unique identifier.
 - **Sample Response:**
   ```json
-  {
-    "id": 1,
-    "house_id": 1,
-    "user_id": 2,
-    "rating": 4.5,
-    "comment": "Great property!",
-    ...
-  }
-  ```
-
-#### **POST /api/comments**
-
-- **Description:**  
-  Create a new comment and rating.
-- **Request Body (JSON):**
-  ```json
-  {
-    "house_id": 1,
-    "user_id": 2,
-    "rating": 4.5,
-    "comment": "Great property!"
-  }
-  ```
-- **Sample Response:**
-  ```json
-  {
-    "id": 1,
-    "house_id": 1,
-    "user_id": 2,
-    "rating": 4.5,
-    "comment": "Great property!",
-    "createdAt": "2023-03-01T00:00:00.000Z",
-    ...
-  }
-  ```
-
-#### **PUT /api/comments/:id**
-
-- **Description:**  
-  Update an existing comment or rating.
-- **Request Body (JSON):**
-  ```json
-  {
-    "rating": 4.8,
-    "comment": "Updated comment: excellent property!"
-  }
-  ```
-- **Sample Response:**
-  ```json
-  {
-    "id": 1,
-    "house_id": 1,
-    "user_id": 2,
-    "rating": 4.8,
-    "comment": "Updated comment: excellent property!",
-    "updatedAt": "2023-03-05T00:00:00.000Z",
-    ...
-  }
-  ```
-
-#### **DELETE /api/comments/:id**
-
-- **Description:**  
-  Delete a comment by its ID.
-- **Sample Response:**
-  ```json
-  { "message": "Comment deleted successfully" }
+  { "userId": 3, "totalPoints": 25 }
   ```
 
 ---
 
-### 5. Payment & Reservations
+## 5. Payment & Reservations
 
-#### **POST /api/payments/checkout**
+### **POST /api/payments/checkout**
 
-- **Description:**  
-  Initiate a payment for a booking.
-- **Request Body (JSON):**
+- **Description:** Initiate a payment process for a booking.
+- **Request Body:** (JSON)
   ```json
-  {
-    "bookingId": 1,
-    "amount": 1200
-  }
+  { "bookingId": 1, "amount": 1200 }
   ```
+- **Scenario:** When a user initiates payment for a reservation.
 - **Sample Response:**
   ```json
   {
@@ -513,83 +432,70 @@ Below is a detailed description of each endpoint category, including the HTTP me
   }
   ```
 
-#### **GET /api/payments/status/:transactionId**
+### **GET /api/payments/status/:transactionId**
 
-- **Description:**  
-  Check the payment status of a transaction.
+- **Description:** Check the status of a payment transaction.
 - **URL Parameter:**  
-  - `transactionId` – The ID of the transaction.
+  - `transactionId`: The transaction identifier.
 - **Sample Response:**
   ```json
   { "status": "paid" }
   ```
 
-#### **POST /api/payments/verify**
+### **POST /api/payments/verify**
 
-- **Description:**  
-  Verify a payment after a successful transaction.
-- **Request Body (JSON):**
+- **Description:** Verify a payment after the transaction is processed.
+- **Request Body:** (JSON)
   ```json
-  {
-    "authority": "FAKE_AUTH_CODE_12345",
-    "status": "OK",
-    "bookingId": 1
-  }
+  { "authority": "FAKE_AUTH_CODE_12345", "status": "OK", "bookingId": 1 }
   ```
-- **Sample Response (if verified successfully):**
+- **Scenario:** Once the payment is completed at the gateway, this endpoint verifies it.
+- **Sample Response:**
   ```json
   { "message": "Payment successful and booking updated" }
   ```
 
 ---
 
-### 6. Blogs
+## 6. Blogs
 
-#### **GET /api/blogs**
+### **GET /api/blogs**
 
-- **Description:**  
-  Retrieve all blog posts with filtering support based on title, author_id, or category_id.
-- **Sample Request:**
-  ```
-  GET /api/blogs?page=1&limit=10
-  ```
+- **Description:** Retrieve all blog posts with optional filtering.
+- **Query Parameters:**  
+  - `page`, `limit`, `sort`, `order` for pagination and sorting.
+- **Scenario:** Display blog posts on the website.
 - **Sample Response:**
   ```json
   [
-    { "id": 1, "title": "Real Estate Trends", "author_id": 2, "category_id": 3, ... },
+    { "id": 1, "title": "Real Estate Trends", "author_id": 2, "category_id": 3, "createdAt": "2023-01-01T00:00:00.000Z" },
     ...
   ]
   ```
 
-#### **GET /api/blogs/:id**
+### **GET /api/blogs/:id**
 
-- **Description:**  
-  Retrieve details of a specific blog post.
-- **Sample Request:**
-  ```
-  GET /api/blogs/1
-  ```
+- **Description:** Retrieve a specific blog post by its ID.
 - **Sample Response:**
   ```json
   {
     "id": 1,
     "title": "Real Estate Trends",
-    "content": "Detailed blog content here...",
+    "content": "Detailed content here...",
     "author_id": 2,
     "category_id": 3,
-    ...
+    "createdAt": "2023-01-01T00:00:00.000Z"
   }
   ```
 
-#### **POST /api/blogs**
+### **POST /api/blogs**
 
-- **Description:**  
-  Create a new blog post.
-- **Request Body (JSON):**
+- **Description:** Create a new blog post.
+- **Request Body:** (JSON)
   ```json
   {
     "title": "New Trends in Real Estate",
-    "content": "Blog content goes here...",
+    "content": "Blog content here...",
     "author_id": 2,
     "category_id": 3
   }
@@ -599,23 +505,21 @@ Below is a detailed description of each endpoint category, including the HTTP me
   {
     "id": 1,
     "title": "New Trends in Real Estate",
-    "content": "Blog content goes here...",
+    "content": "Blog content here...",
     "author_id": 2,
     "category_id": 3,
-    "createdAt": "2023-03-01T00:00:00.000Z",
-    ...
+    "createdAt": "2023-03-01T00:00:00.000Z"
   }
   ```
 
-#### **PUT /api/blogs/:id**
+### **PUT /api/blogs/:id**
 
-- **Description:**  
-  Update a blog post.
-- **Request Body (JSON):**
+- **Description:** Update an existing blog post.
+- **Request Body:** (JSON)
   ```json
   {
     "title": "Updated Real Estate Trends",
-    "content": "Updated blog content..."
+    "content": "Updated content..."
   }
   ```
 - **Sample Response:**
@@ -623,16 +527,14 @@ Below is a detailed description of each endpoint category, including the HTTP me
   {
     "id": 1,
     "title": "Updated Real Estate Trends",
-    "content": "Updated blog content...",
-    "updatedAt": "2023-03-05T00:00:00.000Z",
-    ...
+    "content": "Updated content...",
+    "updatedAt": "2023-03-05T00:00:00.000Z"
   }
   ```
 
-#### **DELETE /api/blogs/:id**
+### **DELETE /api/blogs/:id**
 
-- **Description:**  
-  Delete a blog post.
+- **Description:** Delete a blog post.
 - **Sample Response:**
   ```json
   { "message": "Blog post deleted successfully" }
@@ -640,39 +542,31 @@ Below is a detailed description of each endpoint category, including the HTTP me
 
 ---
 
-### 7. Categories
+## 7. Categories
 
-#### **GET /api/categories**
+### **GET /api/categories**
 
-- **Description:**  
-  Retrieve all categories.
+- **Description:** Retrieve all categories.
 - **Sample Response:**
   ```json
   [
     { "id": 1, "name": "Residential" },
-    { "id": 2, "name": "Commercial" },
-    ...
+    { "id": 2, "name": "Commercial" }
   ]
   ```
 
-#### **GET /api/categories/:id**
+### **GET /api/categories/:id**
 
-- **Description:**  
-  Retrieve details of a specific category.
-- **Sample Request:**
-  ```
-  GET /api/categories/1
-  ```
+- **Description:** Retrieve a specific category.
 - **Sample Response:**
   ```json
   { "id": 1, "name": "Residential" }
   ```
 
-#### **POST /api/categories**
+### **POST /api/categories**
 
-- **Description:**  
-  Create a new category.
-- **Request Body (JSON):**
+- **Description:** Create a new category.
+- **Request Body:** (JSON)
   ```json
   { "name": "Luxury" }
   ```
@@ -681,11 +575,10 @@ Below is a detailed description of each endpoint category, including the HTTP me
   { "id": 3, "name": "Luxury" }
   ```
 
-#### **PUT /api/categories/:id**
+### **PUT /api/categories/:id**
 
-- **Description:**  
-  Update a category.
-- **Request Body (JSON):**
+- **Description:** Update an existing category.
+- **Request Body:** (JSON)
   ```json
   { "name": "Updated Category Name" }
   ```
@@ -694,10 +587,9 @@ Below is a detailed description of each endpoint category, including the HTTP me
   { "id": 1, "name": "Updated Category Name" }
   ```
 
-#### **DELETE /api/categories/:id**
+### **DELETE /api/categories/:id**
 
-- **Description:**  
-  Delete a category.
+- **Description:** Delete a category.
 - **Sample Response:**
   ```json
   { "message": "Category deleted successfully" }
@@ -705,13 +597,12 @@ Below is a detailed description of each endpoint category, including the HTTP me
 
 ---
 
-### 8. Favorites
+## 8. Favorites
 
-#### **POST /api/favorites/add**
+### **POST /api/favorites/add**
 
-- **Description:**  
-  Add a house to a user's favorites.
-- **Request Body (JSON):**
+- **Description:** Add a house to a user's favorites.
+- **Request Body:** (JSON)
   ```json
   { "user_id": 1, "house_id": 2 }
   ```
@@ -720,11 +611,10 @@ Below is a detailed description of each endpoint category, including the HTTP me
   { "id": 1, "user_id": 1, "house_id": 2 }
   ```
 
-#### **DELETE /api/favorites/remove**
+### **DELETE /api/favorites/remove**
 
-- **Description:**  
-  Remove a house from a user's favorites.
-- **Request Body (JSON):**
+- **Description:** Remove a house from a user's favorites.
+- **Request Body:** (JSON)
   ```json
   { "user_id": 1, "house_id": 2 }
   ```
@@ -733,73 +623,62 @@ Below is a detailed description of each endpoint category, including the HTTP me
   { "message": "Favorite removed successfully" }
   ```
 
-#### **GET /api/favorites/:user_id**
+### **GET /api/favorites/:user_id**
 
-- **Description:**  
-  Retrieve all favorite houses for a specific user with pagination.
+- **Description:** Retrieve all favorite houses for a user, with pagination.
+- **URL Parameter:**  
+  - `user_id`: The user's unique identifier.
 - **Sample Request:**
-  ```
-  GET /api/favorites/1?page=1&limit=10
-  ```
+  `GET /api/favorites/1?page=1&limit=10`
 - **Sample Response:**
   ```json
   [
-    { "id": 1, "user_id": 1, "house_id": 2, ... },
+    { "id": 1, "user_id": 1, "house_id": 2 },
     ...
   ]
   ```
 
 ---
 
-### 9. Locations
+## 9. Locations
 
-#### **GET /api/locations**
+### **GET /api/locations**
 
-- **Description:**  
-  Retrieve all locations with filtering support based on area_name, lat, or lng.
-- **Sample Request:**
-  ```
-  GET /api/locations?page=1&limit=10
-  ```
+- **Description:** Retrieve all locations with optional filtering.
+- **Query Parameters:**  
+  - `page`, `limit`, etc.
 - **Sample Response:**
   ```json
   [
     { "id": 1, "area_name": "Downtown", "lat": 35.6892, "lng": 51.3890 },
-    ...
+    { "id": 2, "area_name": "Uptown", "lat": 35.7000, "lng": 51.4000 }
   ]
   ```
 
-#### **GET /api/locations/:id**
+### **GET /api/locations/:id**
 
-- **Description:**  
-  Retrieve details of a specific location.
-- **Sample Request:**
-  ```
-  GET /api/locations/1
-  ```
+- **Description:** Retrieve details of a specific location.
 - **Sample Response:**
   ```json
   { "id": 1, "area_name": "Downtown", "lat": 35.6892, "lng": 51.3890 }
   ```
 
-#### **POST /api/locations**
+### **POST /api/locations**
 
-- **Description:**  
-  Create a new location.
-- **Request Body (JSON):**
+- **Description:** Create a new location.
+- **Request Body:** (JSON)
   ```json
-  { "area_name": "Uptown", "lat": 35.7000, "lng": 51.4000 }
+  { "area_name": "Midtown", "lat": 35.6850, "lng": 51.3750 }
   ```
 - **Sample Response:**
   ```json
-  { "id": 2, "area_name": "Uptown", "lat": 35.7000, "lng": 51.4000 }
+  { "id": 3, "area_name": "Midtown", "lat": 35.6850, "lng": 51.3750 }
   ```
 
-#### **PUT /api/locations/:id**
+### **PUT /api/locations/:id**
 
-- **Description:**  
-  Update a location.
-- **Request Body (JSON):**
+- **Description:** Update an existing location.
+- **Request Body:** (JSON)
   ```json
   { "area_name": "Updated Area" }
   ```
@@ -808,10 +687,9 @@ Below is a detailed description of each endpoint category, including the HTTP me
   { "id": 1, "area_name": "Updated Area", "lat": 35.6892, "lng": 51.3890 }
   ```
 
-#### **DELETE /api/locations/:id**
+### **DELETE /api/locations/:id**
 
-- **Description:**  
-  Delete a location.
+- **Description:** Delete a location.
 - **Sample Response:**
   ```json
   { "message": "Location deleted successfully" }
@@ -819,67 +697,54 @@ Below is a detailed description of each endpoint category, including the HTTP me
 
 ---
 
-### 10. Social Media Links
+## 10. Social Media Links
 
-#### **GET /api/social-media-links**
+### **GET /api/social-media-links**
 
-- **Description:**  
-  Retrieve all social media links with filtering support based on platform or URL.
-- **Sample Request:**
-  ```
-  GET /api/social-media-links?page=1&limit=10
-  ```
+- **Description:** Retrieve all social media links with optional filtering.
 - **Sample Response:**
   ```json
   [
     { "id": 1, "platform": "Facebook", "url": "https://facebook.com/realestate" },
-    ...
+    { "id": 2, "platform": "Twitter", "url": "https://twitter.com/realestate" }
   ]
   ```
 
-#### **GET /api/social-media-links/:id**
+### **GET /api/social-media-links/:id**
 
-- **Description:**  
-  Retrieve details of a specific social media link.
-- **Sample Request:**
-  ```
-  GET /api/social-media-links/1
-  ```
+- **Description:** Retrieve details of a specific social media link.
 - **Sample Response:**
   ```json
   { "id": 1, "platform": "Facebook", "url": "https://facebook.com/realestate" }
   ```
 
-#### **POST /api/social-media-links**
+### **POST /api/social-media-links**
 
-- **Description:**  
-  Create a new social media link.
-- **Request Body (JSON):**
+- **Description:** Create a new social media link.
+- **Request Body:** (JSON)
   ```json
-  { "platform": "Twitter", "url": "https://twitter.com/realestate" }
+  { "platform": "Instagram", "url": "https://instagram.com/realestate" }
   ```
 - **Sample Response:**
   ```json
-  { "id": 2, "platform": "Twitter", "url": "https://twitter.com/realestate" }
+  { "id": 3, "platform": "Instagram", "url": "https://instagram.com/realestate" }
   ```
 
-#### **PUT /api/social-media-links/:id**
+### **PUT /api/social-media-links/:id**
 
-- **Description:**  
-  Update a social media link.
-- **Request Body (JSON):**
+- **Description:** Update an existing social media link.
+- **Request Body:** (JSON)
   ```json
-  { "url": "https://twitter.com/newrealestate" }
+  { "url": "https://instagram.com/newrealestate" }
   ```
 - **Sample Response:**
   ```json
-  { "id": 2, "platform": "Twitter", "url": "https://twitter.com/newrealestate" }
+  { "id": 3, "platform": "Instagram", "url": "https://instagram.com/newrealestate" }
   ```
 
-#### **DELETE /api/social-media-links/:id**
+### **DELETE /api/social-media-links/:id**
 
-- **Description:**  
-  Delete a social media link.
+- **Description:** Delete a social media link.
 - **Sample Response:**
   ```json
   { "message": "Social media link deleted successfully" }
@@ -887,48 +752,53 @@ Below is a detailed description of each endpoint category, including the HTTP me
 
 ---
 
-### 11. Social Authentication
+## 11. Social Authentication
 
-#### **POST /api/auth/social/{provider}**  
-*(Provider can be facebook, google, or linkedin)*
+### **Social Login Endpoints**
 
-- **Description:**  
-  Authenticate using a social network. On success, the user is either logged in or registered, and a JWT token is issued.
-- **Usage:**  
-  This is handled by Passport.js. The routes for each provider are defined in `routes/socialAuthRoutes.ts` and include callback URLs.
-- **Example:**  
-  - `GET /api/auth/social/facebook` – Redirects to Facebook for authentication.
-  - `GET /api/auth/social/facebook/callback` – Callback endpoint after authentication.
+- **GET /api/auth/social/facebook**  
+  Redirects the user to Facebook for authentication.
+
+- **GET /api/auth/social/facebook/callback**  
+  Callback endpoint after Facebook authentication.
+
+- **GET /api/auth/social/google**  
+  Redirects the user to Google for authentication.
+
+- **GET /api/auth/social/google/callback**  
+  Callback endpoint after Google authentication.
+
+- **GET /api/auth/social/linkedin**  
+  Redirects the user to LinkedIn for authentication.
+
+- **GET /api/auth/social/linkedin/callback**  
+  Callback endpoint after LinkedIn authentication.
+
+*Note:* These endpoints are handled by Passport.js and return a JWT token upon successful authentication.
 
 ---
 
-### 12. Social Sharing
+## 12. Social Sharing
 
-#### **GET /api/share/property**
+### **GET /api/share/property**
 
-- **Description:**  
-  Generate a shareable URL for a property.
-- **Query Parameters:**  
-  - `propertyId` – The ID of the property to share.
-- **Sample Request:**
-  ```
-  GET /api/share/property?propertyId=1
-  ```
+- **Description:** Generate a shareable URL for a property.
+- **Query Parameter:**  
+  - `propertyId`: ID of the property.
+- **Sample Request:**  
+  `GET /api/share/property?propertyId=1`
 - **Sample Response:**
   ```json
   { "shareUrl": "https://yourdomain.com/properties/1" }
   ```
 
-#### **GET /api/share/comment**
+### **GET /api/share/comment**
 
-- **Description:**  
-  Generate a shareable URL for a comment.
-- **Query Parameters:**  
-  - `commentId` – The ID of the comment to share.
-- **Sample Request:**
-  ```
-  GET /api/share/comment?commentId=1
-  ```
+- **Description:** Generate a shareable URL for a comment.
+- **Query Parameter:**  
+  - `commentId`: ID of the comment.
+- **Sample Request:**  
+  `GET /api/share/comment?commentId=1`
 - **Sample Response:**
   ```json
   { "shareUrl": "https://yourdomain.com/comments/1" }
@@ -936,20 +806,17 @@ Below is a detailed description of each endpoint category, including the HTTP me
 
 ---
 
-### 13. Advanced Geo-Search
+## 13. Advanced Geo-Search
 
-#### **GET /api/houses/geo-search**
+### **GET /api/houses/geo-search**
 
-- **Description:**  
-  Retrieve houses within a specified geographical radius. Uses PostGIS functions for geo-search.
+- **Description:** Retrieve houses within a specified geographical radius using PostGIS functions.
 - **Query Parameters:**  
-  - `lat` – Latitude (required)
-  - `lng` – Longitude (required)
-  - `radius` – Search radius in meters (required)
-- **Sample Request:**
-  ```
-  GET /api/houses/geo-search?lat=35.6892&lng=51.3890&radius=5000
-  ```
+  - `lat`: Latitude (required)
+  - `lng`: Longitude (required)
+  - `radius`: Search radius in meters (required)
+- **Sample Request:**  
+  `GET /api/houses/geo-search?lat=35.6892&lng=51.3890&radius=5000`
 - **Sample Response:**
   ```json
   [
@@ -960,15 +827,14 @@ Below is a detailed description of each endpoint category, including the HTTP me
 
 ---
 
-### 14. Real-time Notifications & Chat
+## 14. Real-time Notifications & Chat
 
-#### **Notifications**
+### **Notifications**
 
-##### **POST /api/notifications/send**
+#### **POST /api/notifications/send**
 
-- **Description:**  
-  Send a real-time notification to a specific room (e.g., user ID) via Socket.IO.
-- **Request Body (JSON):**
+- **Description:** Send a real-time push notification to a specific room (e.g., user ID) via Socket.IO.
+- **Request Body:** (JSON)
   ```json
   {
     "room": "user_1",
@@ -980,18 +846,15 @@ Below is a detailed description of each endpoint category, including the HTTP me
   { "message": "Notification sent successfully" }
   ```
 
-#### **Chat**
+### **Chat**
 
-##### **GET /api/chats/:room**
+#### **GET /api/chats/:room**
 
-- **Description:**  
-  Retrieve chat history for a specific room.
+- **Description:** Retrieve chat history for a specific room.
 - **URL Parameter:**  
-  - `room` – The chat room identifier.
-- **Sample Request:**
-  ```
-  GET /api/chats/room123
-  ```
+  - `room`: The identifier for the chat room.
+- **Sample Request:**  
+  `GET /api/chats/room123`
 - **Sample Response:**
   ```json
   [
@@ -1000,11 +863,10 @@ Below is a detailed description of each endpoint category, including the HTTP me
   ]
   ```
 
-##### **POST /api/chats/send**
+#### **POST /api/chats/send**
 
-- **Description:**  
-  Send a chat message and broadcast it to the room via Socket.IO.
-- **Request Body (JSON):**
+- **Description:** Send a chat message to a room. The message is broadcast via Socket.IO.
+- **Request Body:** (JSON)
   ```json
   {
     "room": "room123",
@@ -1025,21 +887,18 @@ Below is a detailed description of each endpoint category, including the HTTP me
 
 ---
 
-### 15. Advanced Reporting (Dashboard)
+## 15. Advanced Reporting (Dashboard)
 
-#### **GET /api/reporting/advanced**
+### **GET /api/reporting/advanced**
 
-- **Description:**  
-  Retrieve advanced analytical reports including:
-  - Conversion rate (bookings with transaction_type 'direct_purchase')
-  - Average booking price
-  - Total revenue (sum of prices for booked houses)
-  - Booking distribution by transaction type
-  - Heatmap data (number of houses per location)
-- **Sample Request:**
-  ```
-  GET /api/reporting/advanced
-  ```
+- **Description:** Retrieve advanced analytical reports including:
+  - **Conversion Rate:** Percentage of bookings with transaction type "direct_purchase".
+  - **Average Booking Price:** Average price of houses that have been booked.
+  - **Total Revenue:** Sum of prices for booked houses.
+  - **Booking Distribution:** Count of bookings grouped by the transaction type.
+  - **Heatmap Data:** Number of houses per location (grouped by area_name).
+- **Sample Request:**  
+  `GET /api/reporting/advanced`
 - **Sample Response:**
   ```json
   {
@@ -1059,15 +918,14 @@ Below is a detailed description of each endpoint category, including the HTTP me
 
 ---
 
-### 16. User Profile Management
+## 16. User Profile Management
 
-#### **PUT /api/users/profile/:id**
+### **PUT /api/users/profile/:id**
 
-- **Description:**  
-  Update a comprehensive user profile including additional fields such as address, phone, buyingHistory, and sellingHistory. Sensitive fields (email, phone) are validated.
+- **Description:** Update a comprehensive user profile with additional details.
 - **URL Parameter:**  
-  - `id` – User ID.
-- **Request Body (JSON):**
+  - `id`: The user's unique identifier.
+- **Request Body:** (JSON)
   ```json
   {
     "email": "newemail@example.com",
@@ -1092,99 +950,148 @@ Below is a detailed description of each endpoint category, including the HTTP me
 
 ---
 
-## Setup & Installation
+## 17. Recommendation System
 
-1. **Install Dependencies:**  
-   Make sure Node.js and npm/yarn are installed. Run:
-   ```bash
-   npm install
-   ```
-   or
-   ```bash
-   yarn install
-   ```
+### **GET /api/recommendations/:userId**
 
-2. **Configure Environment Variables:**  
-   Create a `.env` file in the project root and define variables such as:
-   - `PORT`
-   - `ACCESS_TOKEN_SECRET`
-   - `REFRESH_TOKEN_SECRET`
-   - `FACEBOOK_APP_ID`, `FACEBOOK_APP_SECRET`, `FACEBOOK_CALLBACK_URL`
-   - `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, `GOOGLE_CALLBACK_URL`
-   - `LINKEDIN_CLIENT_ID`, `LINKEDIN_CLIENT_SECRET`, `LINKEDIN_CALLBACK_URL`
-   - Database connection settings
-
-3. **Compile TypeScript (if not using ts-node):**  
-   ```bash
-   tsc
-   ```
-
-4. **Start the Server:**  
-   ```bash
-   npm start
-   ```
-   The server will run on the port specified in your environment variables (default is 3000).
-
----
-
-## Usage Examples
-
-- **Listing Houses:**  
-  `GET /api/houses?page=1&limit=10&sort=price&order=DESC`  
-  Retrieves a paginated list of houses sorted by price in descending order.
-
-- **Advanced Geo-Search:**  
-  `GET /api/houses/geo-search?lat=35.6892&lng=51.3890&radius=5000`  
-  Retrieves houses within a 5km radius of the given coordinates.
-
-- **User Login:**  
-  `POST /api/users/login` with body:
-  ```json
-  { "email": "user@example.com", "password": "securePassword" }
-  ```
-  Returns a JWT token for authenticated requests.
-
-- **Initiate Payment:**  
-  `POST /api/payments/checkout` with body:
-  ```json
-  { "bookingId": 1, "amount": 1200 }
-  ```
-  Returns a payment URL and authority code.
-
-- **Send Real-time Notification (via Socket.IO):**  
-  Use the `sendNotification` event in Socket.IO (see socket implementation) to send notifications to users.
-
-- **Social Authentication:**  
-  Access endpoints like `GET /api/auth/social/facebook` to log in via social networks.
-
-- **Update User Profile:**  
-  `PUT /api/users/profile/1` with body:
+- **Description:** Retrieve property recommendations for a user based on historical data, preferences, and buying behavior.  
+- **URL Parameter:**  
+  - `userId`: The ID of the user for whom recommendations are generated.
+- **Scenario:** Provides intelligent suggestions for properties (this is a dummy implementation returning the top 5 cheapest houses).
+- **Sample Response:**
   ```json
   {
-    "email": "newemail@example.com",
-    "phone": "09123456789",
-    "address": "456 New Address",
-    "buyingHistory": ["House 1", "House 2"],
-    "sellingHistory": ["House 3"]
+    "userId": 5,
+    "recommendations": [
+      { "id": 3, "title": "Affordable Apartment", "price": 900, ... },
+      ...
+    ]
   }
   ```
 
+### **POST /api/recommendations/predict**
+
+- **Description:** Predict the price of a property based on its features using a (dummy) neural network model.
+- **Request Body:** (JSON)
+  ```json
+  { "size": 120, "rooms": 3 }
+  ```
+- **Scenario:** Helps users understand the expected price of a property based on given features.
+- **Sample Response:**
+  ```json
+  { "predictedPrice": 190000 }
+  ```
+
 ---
 
-## Future Enhancements
+## 18. Gamification & Feedback
 
-- **Real-time Analytics:** Integrate real-time data streams for analytics dashboards.
-- **Advanced Search Filters:** Enhance search functionality with more detailed filters and full-text search.
-- **Push Notifications:** Integrate with services like Firebase Cloud Messaging for mobile push notifications.
-- **Chat Enhancements:** Add features such as file sharing, typing indicators, and read receipts in the chat system.
-- **Blockchain Integration:** For secure, transparent property ownership tracking.
-- **Machine Learning Recommendations:** Implement recommendation systems for properties based on user behavior.
+### **POST /api/feedback**
+
+- **Description:** Create a new feedback entry which combines review and loyalty points.
+- **Request Body:** (JSON)
+  ```json
+  {
+    "reviewerId": 2,
+    "revieweeId": 3,
+    "rating": 4.5,
+    "comment": "Great transaction!",
+    "pointsAwarded": 10
+  }
+  ```
+- **Scenario:** A seller leaves feedback for a buyer, awarding loyalty points along with a rating and comment.
+- **Sample Response:**
+  ```json
+  {
+    "id": 1,
+    "reviewerId": 2,
+    "revieweeId": 3,
+    "rating": 4.5,
+    "comment": "Great transaction!",
+    "pointsAwarded": 10,
+    "createdAt": "2023-03-01T00:00:00.000Z"
+  }
+  ```
+
+### **GET /api/feedback/received/:userId**
+
+- **Description:** Retrieve all feedback received by a specific user along with the total loyalty points earned.
+- **URL Parameter:**  
+  - `userId`: The ID of the user receiving feedback.
+- **Sample Response:**
+  ```json
+  {
+    "feedbacks": [
+      { "id": 1, "rating": 4.5, "comment": "Great transaction!", "pointsAwarded": 10 },
+      ...
+    ],
+    "totalPoints": 10
+  }
+  ```
+
+### **GET /api/feedback/given/:userId**
+
+- **Description:** Retrieve all feedback submitted by a specific user.
+- **URL Parameter:**  
+  - `userId`: The ID of the user who provided feedback.
+- **Sample Response:**
+  ```json
+  [
+    { "id": 1, "rating": 4.5, "comment": "Great transaction!", "pointsAwarded": 10 },
+    ...
+  ]
+  ```
+
+### **GET /api/feedback/loyalty/:userId**
+
+- **Description:** Retrieve the total loyalty points accumulated by a user.
+- **URL Parameter:**  
+  - `userId`: The user's unique identifier.
+- **Sample Response:**
+  ```json
+  { "userId": 3, "totalPoints": 25 }
+  ```
 
 ---
 
-This documentation provides a comprehensive guide to all API endpoints, their usage, expected inputs, and response examples. It covers the complete functionality of the Real Estate API, ensuring that both developers and API consumers have the necessary information to interact with the system effectively.
+## Scenarios
+
+1. **User Registration & Login:**  
+   A new user signs up using the registration endpoint. After registration, the user logs in and receives an access token and a refresh token, which will be used for authenticated API requests.
+
+2. **Property Browsing:**  
+   Users can browse properties with various filters (e.g., by price, address, transaction type) using the `/api/houses` endpoint. They can also perform advanced geo-search to locate properties within a specific radius.
+
+3. **Booking & Payment:**  
+   When a user makes a booking, they initiate a payment via `/api/payments/checkout`. After payment, the transaction is verified using `/api/payments/verify`, and the booking is updated accordingly.
+
+4. **Feedback & Loyalty:**  
+   After a transaction, a seller or buyer can leave feedback using the unified feedback endpoint. The system accumulates loyalty points based on the feedback, and users can view their total points and rewards through the loyalty endpoints.
+
+5. **Property Recommendations:**  
+   Based on user activity, the recommendation system provides suggestions for properties. The recommendation endpoint uses historical data and a dummy neural network model for price prediction.
+
+6. **Real-time Interaction:**  
+   The API supports real-time notifications and chat. When a significant event occurs (e.g., booking confirmation or payment update), a notification is sent via Socket.IO. Users can also communicate through the chat endpoints.
+
+7. **Social Features:**  
+   Users can log in via social authentication (Facebook, Google, LinkedIn) and share properties or comments on social media using the sharing endpoints.
+
+8. **Advanced Reporting:**  
+   Admins can access detailed analytical reports on bookings, revenue, and property distribution using the advanced reporting endpoints.
+
+9. **User Profile Management:**  
+   Users have a public profile that displays non-sensitive information. They can update their profile using the dedicated endpoint to reflect changes in address, contact info, and history.
+
+10. **Gamification:**  
+    Users earn loyalty points based on their activities (e.g., leaving feedback, booking properties) which can later be redeemed for rewards, such as discounts on future bookings.
+
+---
+
+This documentation covers all endpoints and scenarios in detail, providing a complete picture of how the API functions. Frontend developers can refer to this guide to understand the available resources and how to interact with the backend system effectively.
+
 ```
 
 ---
 
-You can save the above content as your `README.md` file on GitHub. If you need further modifications or additional sections, let me know!
+This README.md file is intended to be a comprehensive reference for all API endpoints and scenarios for your Real Estate API project. If you need further customization or additional sections, let me know!
