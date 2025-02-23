@@ -1,13 +1,11 @@
-Below is a comprehensive API documentation in Markdown format intended for frontend developers. This document details every API endpoint, its parameters, expected inputs/outputs, and usage scenarios without including installation or frontend integration instructions.
 
----
-
-```markdown
 # Real Estate API Documentation
 
 ## Introduction
 
-This API provides a comprehensive set of endpoints for managing real estate properties, bookings, user interactions, payments, and more. The API supports advanced features such as geo-search, real-time notifications, social authentication, intelligent recommendations, and a gamification system. This documentation describes each endpoint, the required parameters, and scenarios so that frontend developers have a complete understanding of how to interact with the backend.
+This API provides a comprehensive set of endpoints for managing real estate properties, bookings, user interactions, payments, and more. It supports advanced features such as geo-search, real-time notifications, social authentication, intelligent recommendations, and gamification. The documentation below details each endpoint, its parameters, expected inputs/outputs, and usage scenarios.
+
+> **Note:** This documentation is intended solely for frontend developers to understand how to interact with the API. It does not include installation or client integration instructions.
 
 ---
 
@@ -16,7 +14,7 @@ This API provides a comprehensive set of endpoints for managing real estate prop
 1. [Properties (Houses)](#1-properties-houses)
 2. [Users](#2-users)
 3. [Bookings](#3-bookings)
-4. [Comments & Ratings / Feedback](#4-comments--ratings--feedback)
+4. [Comments, Ratings & Feedback](#4-comments-ratings--feedback)
 5. [Payment & Reservations](#5-payment--reservations)
 6. [Blogs](#6-blogs)
 7. [Categories](#7-categories)
@@ -37,28 +35,27 @@ This API provides a comprehensive set of endpoints for managing real estate prop
 ## 1. Properties (Houses)
 
 ### **GET /api/houses**
-
-- **Description:** Retrieve all houses with support for filtering, pagination, and sorting.
-- **Query Parameters:**
-  - `page` (optional, default: "1"): Page number.
-  - `limit` (optional, default: "10"): Number of records per page.
-  - `sort` (optional): Field name to sort (e.g., "price", "rate").
-  - `order` (optional, default: "ASC"): Sorting order ("ASC" or "DESC").
-  - Additional filters: `title`, `address`, `rate`, `price`, `capacity`, `transaction_type`.
-- **Scenario:** Used to display a list of properties to users based on specific criteria (e.g., show all rental properties sorted by price descending).
+- **Description:** Retrieve all houses with filtering, pagination, and sorting.
+- **Query Parameters:**  
+  - `page` (optional, default: "1")
+  - `limit` (optional, default: "10")
+  - `sort` (optional) – Field to sort by (e.g., "price", "rate")
+  - `order` (optional, default: "ASC")
+  - Additional filters: `title`, `address`, `rate`, `price`, `capacity`, `transaction_type`
+- **Usage Scenario:** Display a list of properties based on search criteria.
 - **Sample Request:**  
   `GET /api/houses?page=1&limit=10&sort=price&order=DESC&transaction_type=rental`
-- **Sample Response:**
+- **Sample Response:**  
   ```json
   [
     {
       "id": 1,
-      "title": "Modern Apartment",
-      "address": "123 Main St",
+      "title": "آپارتمان مدرن",
+      "address": "خیابان ولیعصر، تهران، منطقه مرکزی",
       "rate": 4.5,
-      "price": 1200,
+      "price": 1200000,
       "capacity": 4,
-      "transaction_type": "rental",
+      "transaction_type": "اجاره",
       "createdAt": "2023-01-01T00:00:00.000Z"
     },
     ...
@@ -66,94 +63,106 @@ This API provides a comprehensive set of endpoints for managing real estate prop
   ```
 
 ### **GET /api/houses/:id**
-
 - **Description:** Retrieve detailed information about a specific house.
 - **URL Parameter:**  
-  - `id`: The house's unique identifier.
-- **Scenario:** When a user selects a property, this endpoint provides all details for that property.
+  - `id`: House identifier.
+- **Usage Scenario:** When a user selects a property, this endpoint provides all details.
 - **Sample Request:**  
   `GET /api/houses/1`
-- **Sample Response:**
+- **Sample Response:**  
   ```json
   {
     "id": 1,
-    "title": "Modern Apartment",
-    "address": "123 Main St",
+    "title": "آپارتمان مدرن",
+    "address": "خیابان ولیعصر، تهران، منطقه مرکزی",
     "rate": 4.5,
-    "price": 1200,
+    "price": 1200000,
     "capacity": 4,
-    "transaction_type": "rental",
-    "photos": ["photo1.jpg", "photo2.jpg"],
+    "transaction_type": "اجاره",
+    "photos": ["https://via.placeholder.com/640x480?text=آپارتمان+مدرن+1", "https://via.placeholder.com/640x480?text=آپارتمان+مدرن+2"],
     "createdAt": "2023-01-01T00:00:00.000Z"
   }
   ```
 
 ### **POST /api/houses**
-
 - **Description:** Create a new house.
 - **Request Body:** (JSON)
   ```json
   {
-    "title": "Modern Apartment",
-    "address": "123 Main St",
+    "title": "آپارتمان مدرن",
+    "address": "خیابان ولیعصر، تهران، منطقه مرکزی",
     "rate": 4.5,
-    "price": 1200,
+    "price": 1200000,
     "capacity": 4,
-    "transaction_type": "rental",
-    "photos": ["photo1.jpg", "photo2.jpg"]
+    "transaction_type": "اجاره",
+    "photos": ["https://via.placeholder.com/640x480?text=آپارتمان+مدرن+1", "https://via.placeholder.com/640x480?text=آپارتمان+مدرن+2"],
+    "tags": ["مدرن", "آپارتمان"],
+    "location": { "lat": 35.6892, "lng": 51.3890 },
+    "categories": { "categories": ["مسکونی"] }
   }
   ```
-- **Scenario:** Used by property managers or sellers to add a new property.
-- **Sample Response:**
+- **Usage Scenario:** Used by property managers to add new properties.
+- **Sample Response:**  
   ```json
   {
     "id": 1,
-    "title": "Modern Apartment",
-    "address": "123 Main St",
+    "title": "آپارتمان مدرن",
+    "address": "خیابان ولیعصر، تهران، منطقه مرکزی",
     "rate": 4.5,
-    "price": 1200,
+    "price": 1200000,
     "capacity": 4,
-    "transaction_type": "rental",
+    "transaction_type": "اجاره",
     "createdAt": "2023-01-01T00:00:00.000Z"
   }
   ```
 
 ### **PUT /api/houses/:id**
-
-- **Description:** Update the details of an existing house.
+- **Description:** Update an existing house.
 - **URL Parameter:**  
-  - `id`: The house's unique identifier.
+  - `id`: House identifier.
 - **Request Body:** (JSON)
   ```json
   {
-    "price": 1300,
+    "price": 1300000,
     "capacity": 5
   }
   ```
-- **Scenario:** Used for correcting or updating property details.
-- **Sample Response:**
+- **Usage Scenario:** For correcting or updating property details.
+- **Sample Response:**  
   ```json
   {
     "id": 1,
-    "title": "Modern Apartment",
-    "address": "123 Main St",
+    "title": "آپارتمان مدرن",
+    "address": "خیابان ولیعصر، تهران، منطقه مرکزی",
     "rate": 4.5,
-    "price": 1300,
+    "price": 1300000,
     "capacity": 5,
-    "transaction_type": "rental",
+    "transaction_type": "اجاره",
     "updatedAt": "2023-02-01T00:00:00.000Z"
   }
   ```
 
 ### **DELETE /api/houses/:id**
-
 - **Description:** Delete a house by its ID.
 - **URL Parameter:**  
-  - `id`: The house's unique identifier.
-- **Scenario:** Allows property managers to remove properties that are no longer available.
-- **Sample Response:**
+  - `id`: House identifier.
+- **Usage Scenario:** Remove properties that are no longer available.
+- **Sample Response:**  
   ```json
   { "message": "House deleted successfully" }
+  ```
+
+### **GET /api/houses/by-rating**
+- **Description:** Retrieve houses sorted by their average rating (computed from user reviews).
+- **Usage Scenario:** Used to display properties based on user feedback and ratings.
+- **Sample Request:**  
+  `GET /api/houses/by-rating`
+- **Sample Response:**  
+  ```json
+  [
+    { "id": 3, "title": "ویلا لوکس", "avgRating": 4.8, ... },
+    { "id": 1, "title": "آپارتمان مدرن", "avgRating": 4.5, ... }
+  ]
   ```
 
 ---
@@ -161,7 +170,6 @@ This API provides a comprehensive set of endpoints for managing real estate prop
 ## 2. Users
 
 ### **POST /api/users/register**
-
 - **Description:** Register a new user.
 - **Request Body:** (JSON)
   ```json
@@ -169,23 +177,22 @@ This API provides a comprehensive set of endpoints for managing real estate prop
     "email": "user@example.com",
     "password": "securePassword",
     "role": "buyer",
-    "name": "John Doe"
+    "name": "علی کاربر"
   }
   ```
-- **Scenario:** Used during user signup.
+- **Usage Scenario:** User signup.
 - **Sample Response:**
   ```json
   {
     "id": 1,
     "email": "user@example.com",
     "role": "buyer",
-    "name": "John Doe",
+    "name": "علی کاربر",
     "createdAt": "2023-01-01T00:00:00.000Z"
   }
   ```
 
 ### **POST /api/users/login**
-
 - **Description:** Authenticate a user and return JWT tokens.
 - **Request Body:** (JSON)
   ```json
@@ -194,43 +201,59 @@ This API provides a comprehensive set of endpoints for managing real estate prop
     "password": "securePassword"
   }
   ```
-- **Scenario:** User logs in and receives an access token (for short-term access) and a refresh token (for obtaining new access tokens).
+- **Usage Scenario:** User logs in and receives an access token and a refresh token.
 - **Sample Response:**
   ```json
   { "accessToken": "jwt_access_token", "refreshToken": "jwt_refresh_token" }
   ```
 
-### **GET /api/users**
+### **POST /api/auth/refresh**
+- **Description:** Refresh the access token using a valid refresh token.
+- **Request Body:** (JSON)
+  ```json
+  { "token": "your_refresh_token_here" }
+  ```
+- **Usage Scenario:** When an access token expires, a new access token is obtained.
+- **Sample Response:**
+  ```json
+  { "accessToken": "new_jwt_access_token" }
+  ```
 
-- **Description:** Retrieve all users, with optional filtering by role or registration date.
-- **Query Parameters:**  
-  - `role` (optional)
-  - `membership_date` (optional)
-  - `page`, `limit` for pagination.
-- **Scenario:** Admin or user management view.
+### **POST /api/auth/logout**
+- **Description:** Log out a user by invalidating the refresh token.
+- **Request Body:** (JSON)
+  ```json
+  { "token": "your_refresh_token_here" }
+  ```
+- **Usage Scenario:** Terminate user session.
+- **Sample Response:**
+  ```json
+  { "message": "Logout successful" }
+  ```
+
+### **GET /api/users**
+- **Description:** Retrieve all users with optional filtering by role or registration date.
+- **Usage Scenario:** Admin view for managing users.
 - **Sample Response:**
   ```json
   [
-    { "id": 1, "email": "user@example.com", "role": "buyer", "name": "John Doe" },
+    { "id": 1, "email": "user@example.com", "role": "buyer", "name": "علی کاربر" },
     ...
   ]
   ```
 
 ### **GET /api/users/:id**
-
 - **Description:** Retrieve details of a specific user.
-- **URL Parameter:**  
-  - `id`: The user’s unique identifier.
-- **Scenario:** For displaying a user’s full profile (private or public as defined).
+- **Usage Scenario:** Display a user's detailed profile.
 - **Sample Response:**
   ```json
   {
     "id": 1,
     "email": "user@example.com",
     "role": "buyer",
-    "name": "John Doe",
+    "name": "علی کاربر",
     "profile": {
-      "address": "123 Main St",
+      "address": "خیابان اصلی، تهران",
       "phone": "09123456789",
       "buyingHistory": [],
       "sellingHistory": []
@@ -239,34 +262,45 @@ This API provides a comprehensive set of endpoints for managing real estate prop
   ```
 
 ### **PUT /api/users/:id**
+- **Description:** Update a user's information (rehashes password if provided).
+- **Usage Scenario:** User profile update.
+- **Sample Response:**
+  ```json
+  { "id": 1, "email": "user@example.com", "name": "علی کاربر به‌روز شده" }
+  ```
 
-- **Description:** Update a user's information.
+### **DELETE /api/users/:id**
+- **Description:** Delete a user by their ID.
+- **Usage Scenario:** Admin deletes a user.
+- **Sample Response:**
+  ```json
+  { "message": "User deleted successfully" }
+  ```
+
+### **PUT /api/users/profile/:id**
+- **Description:** Update a comprehensive public user profile.
 - **Request Body:** (JSON)
   ```json
   {
-    "name": "John Doe Updated",
-    "password": "newSecurePassword"
+    "email": "newemail@example.com",
+    "phone": "09123456789",
+    "address": "خیابان 456، تهران",
+    "buyingHistory": ["خانه ۱", "خانه ۲"],
+    "sellingHistory": ["خانه ۳"]
   }
   ```
-- **Scenario:** Allows users to update their personal details.
+- **Usage Scenario:** Users update their public profile details.
 - **Sample Response:**
   ```json
   {
     "id": 1,
-    "email": "user@example.com",
-    "name": "John Doe Updated"
+    "email": "newemail@example.com",
+    "phone": "09123456789",
+    "address": "خیابان 456، تهران",
+    "buyingHistory": ["خانه ۱", "خانه ۲"],
+    "sellingHistory": ["خانه ۳"],
+    "updatedAt": "2023-04-01T00:00:00.000Z"
   }
-  ```
-
-### **DELETE /api/users/:id**
-
-- **Description:** Delete a user.
-- **URL Parameter:**  
-  - `id`: The user's unique identifier.
-- **Scenario:** Used by admin for user removal.
-- **Sample Response:**
-  ```json
-  { "message": "User deleted successfully" }
   ```
 
 ---
@@ -274,69 +308,55 @@ This API provides a comprehensive set of endpoints for managing real estate prop
 ## 3. Bookings
 
 ### **GET /api/bookings**
-
-- **Description:** Retrieve all bookings with filtering, pagination, and sorting.
-- **Query Parameters:**  
-  - `house_id` (optional) – filter by property.
-  - `page`, `limit`, `sort`, `order` for pagination and sorting.
-- **Scenario:** Display booking history for users or admin.
+- **Description:** Retrieve all bookings with optional filtering (e.g., by house_id), pagination, and sorting.
+- **Usage Scenario:** Display booking history.
 - **Sample Response:**
   ```json
   [
-    { "id": 1, "house_id": 2, "reservedDates": ["2023-05-01", "2023-05-10"], "traveler_details": { "name": "Alice" } },
+    { "id": 1, "house_id": 2, "reservedDates": ["2023-05-01", "2023-05-10"], "traveler_details": { "name": "سارا" } },
     ...
   ]
   ```
 
 ### **GET /api/bookings/:id**
-
 - **Description:** Retrieve details of a specific booking.
-- **URL Parameter:**  
-  - `id`: The booking's unique identifier.
+- **Usage Scenario:** View detailed booking information.
 - **Sample Response:**
   ```json
-  { "id": 1, "house_id": 2, "reservedDates": ["2023-05-01", "2023-05-10"], "traveler_details": { "name": "Alice" } }
+  { "id": 1, "house_id": 2, "reservedDates": ["2023-05-01", "2023-05-10"], "traveler_details": { "name": "سارا" } }
   ```
 
 ### **POST /api/bookings**
-
 - **Description:** Create a new booking.
 - **Request Body:** (JSON)
   ```json
   {
     "house_id": 2,
     "reservedDates": ["2023-05-01", "2023-05-10"],
-    "traveler_details": { "name": "Alice", "contact": "09123456789" }
+    "traveler_details": { "name": "سارا", "contact": "09123456789" }
   }
   ```
-- **Scenario:** When a user reserves a property.
+- **Usage Scenario:** User reserves a property.
 - **Sample Response:**
   ```json
-  {
-    "id": 1,
-    "house_id": 2,
-    "reservedDates": ["2023-05-01", "2023-05-10"],
-    "traveler_details": { "name": "Alice", "contact": "09123456789" }
-  }
+  { "id": 1, "house_id": 2, "reservedDates": ["2023-05-01", "2023-05-10"], "traveler_details": { "name": "سارا", "contact": "09123456789" } }
   ```
 
 ### **PUT /api/bookings/:id**
-
-- **Description:** Update an existing booking.
+- **Description:** Update booking details.
 - **Request Body:** (JSON)
   ```json
-  {
-    "reservedDates": ["2023-05-02", "2023-05-12"]
-  }
+  { "reservedDates": ["2023-05-02", "2023-05-12"] }
   ```
+- **Usage Scenario:** User updates their reservation dates.
 - **Sample Response:**
   ```json
   { "id": 1, "house_id": 2, "reservedDates": ["2023-05-02", "2023-05-12"] }
   ```
 
 ### **DELETE /api/bookings/:id**
-
 - **Description:** Delete a booking.
+- **Usage Scenario:** Cancel a booking.
 - **Sample Response:**
   ```json
   { "message": "Booking deleted successfully" }
@@ -344,22 +364,21 @@ This API provides a comprehensive set of endpoints for managing real estate prop
 
 ---
 
-## 4. Comments & Ratings / Feedback
+## 4. Comments, Ratings & Feedback
 
 ### **POST /api/feedback**
-
-- **Description:** Create a new feedback entry which includes both a comment and a loyalty (rating/points) value.
+- **Description:** Create a new feedback entry (review and loyalty points).
 - **Request Body:** (JSON)
   ```json
   {
     "reviewerId": 2,
     "revieweeId": 3,
     "rating": 4.5,
-    "comment": "Great transaction!",
+    "comment": "معامله عالی بود!",
     "pointsAwarded": 10
   }
   ```
-- **Scenario:** A seller leaves feedback for a buyer (or vice versa), awarding loyalty points.
+- **Usage Scenario:** A seller leaves feedback for a buyer, awarding loyalty points.
 - **Sample Response:**
   ```json
   {
@@ -367,22 +386,20 @@ This API provides a comprehensive set of endpoints for managing real estate prop
     "reviewerId": 2,
     "revieweeId": 3,
     "rating": 4.5,
-    "comment": "Great transaction!",
+    "comment": "معامله عالی بود!",
     "pointsAwarded": 10,
     "createdAt": "2023-03-01T00:00:00.000Z"
   }
   ```
 
 ### **GET /api/feedback/received/:userId**
-
-- **Description:** Retrieve all feedback received by a specific user along with the total loyalty points earned.
-- **URL Parameter:**  
-  - `userId`: The ID of the user receiving feedback.
+- **Description:** Retrieve all feedback received by a user and total loyalty points earned.
+- **Usage Scenario:** Display feedback and loyalty summary on a user's dashboard.
 - **Sample Response:**
   ```json
   {
     "feedbacks": [
-      { "id": 1, "rating": 4.5, "comment": "Great transaction!", "pointsAwarded": 10 },
+      { "id": 1, "rating": 4.5, "comment": "معامله عالی بود!", "pointsAwarded": 10 },
       ...
     ],
     "totalPoints": 10
@@ -390,23 +407,19 @@ This API provides a comprehensive set of endpoints for managing real estate prop
   ```
 
 ### **GET /api/feedback/given/:userId**
-
-- **Description:** Retrieve all feedback given by a specific user.
-- **URL Parameter:**  
-  - `userId`: The ID of the user who provided feedback.
+- **Description:** Retrieve all feedback given by a user.
+- **Usage Scenario:** View the reviews a user has submitted.
 - **Sample Response:**
   ```json
   [
-    { "id": 1, "rating": 4.5, "comment": "Great transaction!", "pointsAwarded": 10 },
+    { "id": 1, "rating": 4.5, "comment": "معامله عالی بود!", "pointsAwarded": 10 },
     ...
   ]
   ```
 
 ### **GET /api/feedback/loyalty/:userId**
-
-- **Description:** Retrieve aggregated loyalty points for a user.
-- **URL Parameter:**  
-  - `userId`: The user's unique identifier.
+- **Description:** Retrieve the total loyalty points accumulated by a user.
+- **Usage Scenario:** Show user's loyalty score.
 - **Sample Response:**
   ```json
   { "userId": 3, "totalPoints": 25 }
@@ -417,13 +430,12 @@ This API provides a comprehensive set of endpoints for managing real estate prop
 ## 5. Payment & Reservations
 
 ### **POST /api/payments/checkout**
-
-- **Description:** Initiate a payment process for a booking.
+- **Description:** Initiate payment for a booking.
 - **Request Body:** (JSON)
   ```json
-  { "bookingId": 1, "amount": 1200 }
+  { "bookingId": 1, "amount": 1200000 }
   ```
-- **Scenario:** When a user initiates payment for a reservation.
+- **Usage Scenario:** User initiates a payment process.
 - **Sample Response:**
   ```json
   {
@@ -433,23 +445,22 @@ This API provides a comprehensive set of endpoints for managing real estate prop
   ```
 
 ### **GET /api/payments/status/:transactionId**
-
-- **Description:** Check the status of a payment transaction.
+- **Description:** Check the status of a payment.
 - **URL Parameter:**  
   - `transactionId`: The transaction identifier.
+- **Usage Scenario:** Verify if a payment has been completed.
 - **Sample Response:**
   ```json
   { "status": "paid" }
   ```
 
 ### **POST /api/payments/verify**
-
-- **Description:** Verify a payment after the transaction is processed.
+- **Description:** Verify a payment after processing.
 - **Request Body:** (JSON)
   ```json
   { "authority": "FAKE_AUTH_CODE_12345", "status": "OK", "bookingId": 1 }
   ```
-- **Scenario:** Once the payment is completed at the gateway, this endpoint verifies it.
+- **Usage Scenario:** Confirm payment and update booking status.
 - **Sample Response:**
   ```json
   { "message": "Payment successful and booking updated" }
@@ -460,80 +471,52 @@ This API provides a comprehensive set of endpoints for managing real estate prop
 ## 6. Blogs
 
 ### **GET /api/blogs**
-
-- **Description:** Retrieve all blog posts with optional filtering.
-- **Query Parameters:**  
-  - `page`, `limit`, `sort`, `order` for pagination and sorting.
-- **Scenario:** Display blog posts on the website.
+- **Description:** Retrieve all blog posts.
+- **Usage Scenario:** Display blog content.
 - **Sample Response:**
   ```json
   [
-    { "id": 1, "title": "Real Estate Trends", "author_id": 2, "category_id": 3, "createdAt": "2023-01-01T00:00:00.000Z" },
+    { "id": 1, "title": "روندهای املاک", "author_id": 2, "category_id": 3, "createdAt": "2023-01-01T00:00:00.000Z" },
     ...
   ]
   ```
 
 ### **GET /api/blogs/:id**
-
-- **Description:** Retrieve a specific blog post by its ID.
+- **Description:** Retrieve a specific blog post.
+- **Usage Scenario:** View detailed blog post.
 - **Sample Response:**
   ```json
-  {
-    "id": 1,
-    "title": "Real Estate Trends",
-    "content": "Detailed content here...",
-    "author_id": 2,
-    "category_id": 3,
-    "createdAt": "2023-01-01T00:00:00.000Z"
-  }
+  { "id": 1, "title": "روندهای املاک", "content": "متن مقاله...", "author_id": 2, "category_id": 3 }
   ```
 
 ### **POST /api/blogs**
-
 - **Description:** Create a new blog post.
 - **Request Body:** (JSON)
   ```json
   {
-    "title": "New Trends in Real Estate",
-    "content": "Blog content here...",
+    "title": "روندهای جدید در املاک",
+    "content": "متن مقاله...",
     "author_id": 2,
     "category_id": 3
   }
   ```
 - **Sample Response:**
   ```json
-  {
-    "id": 1,
-    "title": "New Trends in Real Estate",
-    "content": "Blog content here...",
-    "author_id": 2,
-    "category_id": 3,
-    "createdAt": "2023-03-01T00:00:00.000Z"
-  }
+  { "id": 1, "title": "روندهای جدید در املاک", "content": "متن مقاله...", "author_id": 2, "category_id": 3, "createdAt": "2023-03-01T00:00:00.000Z" }
   ```
 
 ### **PUT /api/blogs/:id**
-
 - **Description:** Update an existing blog post.
 - **Request Body:** (JSON)
   ```json
-  {
-    "title": "Updated Real Estate Trends",
-    "content": "Updated content..."
-  }
+  { "title": "بروزرسانی روندهای املاک", "content": "متن بروزرسانی شده..." }
   ```
 - **Sample Response:**
   ```json
-  {
-    "id": 1,
-    "title": "Updated Real Estate Trends",
-    "content": "Updated content...",
-    "updatedAt": "2023-03-05T00:00:00.000Z"
-  }
+  { "id": 1, "title": "بروزرسانی روندهای املاک", "content": "متن بروزرسانی شده...", "updatedAt": "2023-03-05T00:00:00.000Z" }
   ```
 
 ### **DELETE /api/blogs/:id**
-
 - **Description:** Delete a blog post.
 - **Sample Response:**
   ```json
@@ -545,50 +528,45 @@ This API provides a comprehensive set of endpoints for managing real estate prop
 ## 7. Categories
 
 ### **GET /api/categories**
-
 - **Description:** Retrieve all categories.
 - **Sample Response:**
   ```json
   [
-    { "id": 1, "name": "Residential" },
-    { "id": 2, "name": "Commercial" }
+    { "id": 1, "name": "مسکونی" },
+    { "id": 2, "name": "تجاری" }
   ]
   ```
 
 ### **GET /api/categories/:id**
-
-- **Description:** Retrieve a specific category.
+- **Description:** Retrieve details of a specific category.
 - **Sample Response:**
   ```json
-  { "id": 1, "name": "Residential" }
+  { "id": 1, "name": "مسکونی" }
   ```
 
 ### **POST /api/categories**
-
 - **Description:** Create a new category.
 - **Request Body:** (JSON)
   ```json
-  { "name": "Luxury" }
+  { "name": "لوکس" }
   ```
 - **Sample Response:**
   ```json
-  { "id": 3, "name": "Luxury" }
+  { "id": 3, "name": "لوکس" }
   ```
 
 ### **PUT /api/categories/:id**
-
 - **Description:** Update an existing category.
 - **Request Body:** (JSON)
   ```json
-  { "name": "Updated Category Name" }
+  { "name": "دسته‌بندی بروزرسانی شده" }
   ```
 - **Sample Response:**
   ```json
-  { "id": 1, "name": "Updated Category Name" }
+  { "id": 1, "name": "دسته‌بندی بروزرسانی شده" }
   ```
 
 ### **DELETE /api/categories/:id**
-
 - **Description:** Delete a category.
 - **Sample Response:**
   ```json
@@ -600,7 +578,6 @@ This API provides a comprehensive set of endpoints for managing real estate prop
 ## 8. Favorites
 
 ### **POST /api/favorites/add**
-
 - **Description:** Add a house to a user's favorites.
 - **Request Body:** (JSON)
   ```json
@@ -612,7 +589,6 @@ This API provides a comprehensive set of endpoints for managing real estate prop
   ```
 
 ### **DELETE /api/favorites/remove**
-
 - **Description:** Remove a house from a user's favorites.
 - **Request Body:** (JSON)
   ```json
@@ -624,11 +600,10 @@ This API provides a comprehensive set of endpoints for managing real estate prop
   ```
 
 ### **GET /api/favorites/:user_id**
-
-- **Description:** Retrieve all favorite houses for a user, with pagination.
+- **Description:** Retrieve all favorite houses for a user.
 - **URL Parameter:**  
   - `user_id`: The user's unique identifier.
-- **Sample Request:**
+- **Sample Request:**  
   `GET /api/favorites/1?page=1&limit=10`
 - **Sample Response:**
   ```json
@@ -643,52 +618,46 @@ This API provides a comprehensive set of endpoints for managing real estate prop
 ## 9. Locations
 
 ### **GET /api/locations**
-
 - **Description:** Retrieve all locations with optional filtering.
-- **Query Parameters:**  
-  - `page`, `limit`, etc.
 - **Sample Response:**
   ```json
   [
-    { "id": 1, "area_name": "Downtown", "lat": 35.6892, "lng": 51.3890 },
-    { "id": 2, "area_name": "Uptown", "lat": 35.7000, "lng": 51.4000 }
+    { "id": 1, "area_name": "تهران، منطقه مرکزی", "lat": 35.6892, "lng": 51.3890 },
+    { "id": 2, "area_name": "اصفهان، منطقه تاریخی", "lat": 32.6546, "lng": 51.6680 },
+    { "id": 3, "area_name": "شیراز، منطقه قدیمی", "lat": 29.5918, "lng": 52.5836 }
   ]
   ```
 
 ### **GET /api/locations/:id**
-
 - **Description:** Retrieve details of a specific location.
 - **Sample Response:**
   ```json
-  { "id": 1, "area_name": "Downtown", "lat": 35.6892, "lng": 51.3890 }
+  { "id": 1, "area_name": "تهران، منطقه مرکزی", "lat": 35.6892, "lng": 51.3890 }
   ```
 
 ### **POST /api/locations**
-
 - **Description:** Create a new location.
 - **Request Body:** (JSON)
   ```json
-  { "area_name": "Midtown", "lat": 35.6850, "lng": 51.3750 }
+  { "area_name": "شهر جدید", "lat": 35.7000, "lng": 51.4000 }
   ```
 - **Sample Response:**
   ```json
-  { "id": 3, "area_name": "Midtown", "lat": 35.6850, "lng": 51.3750 }
+  { "id": 4, "area_name": "شهر جدید", "lat": 35.7000, "lng": 51.4000 }
   ```
 
 ### **PUT /api/locations/:id**
-
-- **Description:** Update an existing location.
+- **Description:** Update a location.
 - **Request Body:** (JSON)
   ```json
-  { "area_name": "Updated Area" }
+  { "area_name": "منطقه بروزرسانی شده" }
   ```
 - **Sample Response:**
   ```json
-  { "id": 1, "area_name": "Updated Area", "lat": 35.6892, "lng": 51.3890 }
+  { "id": 1, "area_name": "منطقه بروزرسانی شده", "lat": 35.6892, "lng": 51.3890 }
   ```
 
 ### **DELETE /api/locations/:id**
-
 - **Description:** Delete a location.
 - **Sample Response:**
   ```json
@@ -700,8 +669,7 @@ This API provides a comprehensive set of endpoints for managing real estate prop
 ## 10. Social Media Links
 
 ### **GET /api/social-media-links**
-
-- **Description:** Retrieve all social media links with optional filtering.
+- **Description:** Retrieve all social media links.
 - **Sample Response:**
   ```json
   [
@@ -711,7 +679,6 @@ This API provides a comprehensive set of endpoints for managing real estate prop
   ```
 
 ### **GET /api/social-media-links/:id**
-
 - **Description:** Retrieve details of a specific social media link.
 - **Sample Response:**
   ```json
@@ -719,7 +686,6 @@ This API provides a comprehensive set of endpoints for managing real estate prop
   ```
 
 ### **POST /api/social-media-links**
-
 - **Description:** Create a new social media link.
 - **Request Body:** (JSON)
   ```json
@@ -731,7 +697,6 @@ This API provides a comprehensive set of endpoints for managing real estate prop
   ```
 
 ### **PUT /api/social-media-links/:id**
-
 - **Description:** Update an existing social media link.
 - **Request Body:** (JSON)
   ```json
@@ -743,7 +708,6 @@ This API provides a comprehensive set of endpoints for managing real estate prop
   ```
 
 ### **DELETE /api/social-media-links/:id**
-
 - **Description:** Delete a social media link.
 - **Sample Response:**
   ```json
@@ -754,37 +718,30 @@ This API provides a comprehensive set of endpoints for managing real estate prop
 
 ## 11. Social Authentication
 
-### **Social Login Endpoints**
-
+### Social Login Endpoints
 - **GET /api/auth/social/facebook**  
-  Redirects the user to Facebook for authentication.
-
+  Redirects to Facebook for authentication.
 - **GET /api/auth/social/facebook/callback**  
   Callback endpoint after Facebook authentication.
-
 - **GET /api/auth/social/google**  
-  Redirects the user to Google for authentication.
-
+  Redirects to Google for authentication.
 - **GET /api/auth/social/google/callback**  
   Callback endpoint after Google authentication.
-
 - **GET /api/auth/social/linkedin**  
-  Redirects the user to LinkedIn for authentication.
-
+  Redirects to LinkedIn for authentication.
 - **GET /api/auth/social/linkedin/callback**  
   Callback endpoint after LinkedIn authentication.
 
-*Note:* These endpoints are handled by Passport.js and return a JWT token upon successful authentication.
+*Note:* These endpoints are managed by Passport.js and on successful authentication return a JWT token.
 
 ---
 
 ## 12. Social Sharing
 
 ### **GET /api/share/property**
-
 - **Description:** Generate a shareable URL for a property.
 - **Query Parameter:**  
-  - `propertyId`: ID of the property.
+  - `propertyId`: The property ID.
 - **Sample Request:**  
   `GET /api/share/property?propertyId=1`
 - **Sample Response:**
@@ -793,10 +750,9 @@ This API provides a comprehensive set of endpoints for managing real estate prop
   ```
 
 ### **GET /api/share/comment**
-
 - **Description:** Generate a shareable URL for a comment.
 - **Query Parameter:**  
-  - `commentId`: ID of the comment.
+  - `commentId`: The comment ID.
 - **Sample Request:**  
   `GET /api/share/comment?commentId=1`
 - **Sample Response:**
@@ -809,18 +765,17 @@ This API provides a comprehensive set of endpoints for managing real estate prop
 ## 13. Advanced Geo-Search
 
 ### **GET /api/houses/geo-search**
-
 - **Description:** Retrieve houses within a specified geographical radius using PostGIS functions.
 - **Query Parameters:**  
-  - `lat`: Latitude (required)
-  - `lng`: Longitude (required)
-  - `radius`: Search radius in meters (required)
+  - `lat` (required): Latitude.
+  - `lng` (required): Longitude.
+  - `radius` (required): Radius in meters.
 - **Sample Request:**  
   `GET /api/houses/geo-search?lat=35.6892&lng=51.3890&radius=5000`
 - **Sample Response:**
   ```json
   [
-    { "id": 3, "title": "House in Downtown", ... },
+    { "id": 3, "title": "خانه در مرکز شهر", ... },
     ...
   ]
   ```
@@ -829,16 +784,15 @@ This API provides a comprehensive set of endpoints for managing real estate prop
 
 ## 14. Real-time Notifications & Chat
 
-### **Notifications**
+### Notifications
 
 #### **POST /api/notifications/send**
-
-- **Description:** Send a real-time push notification to a specific room (e.g., user ID) via Socket.IO.
+- **Description:** Send a real-time push notification to a specific room via Socket.IO.
 - **Request Body:** (JSON)
   ```json
   {
     "room": "user_1",
-    "notification": "Your booking has been confirmed!"
+    "notification": "رزرو شما تایید شد!"
   }
   ```
 - **Sample Response:**
@@ -846,32 +800,30 @@ This API provides a comprehensive set of endpoints for managing real estate prop
   { "message": "Notification sent successfully" }
   ```
 
-### **Chat**
+### Chat
 
 #### **GET /api/chats/:room**
-
-- **Description:** Retrieve chat history for a specific room.
+- **Description:** Retrieve chat history for a specified room.
 - **URL Parameter:**  
-  - `room`: The identifier for the chat room.
+  - `room`: Chat room identifier.
 - **Sample Request:**  
   `GET /api/chats/room123`
 - **Sample Response:**
   ```json
   [
-    { "id": 1, "room": "room123", "sender": "user_1", "message": "Hello!", "createdAt": "2023-03-01T00:00:00.000Z" },
+    { "id": 1, "room": "room123", "sender": "user_1", "message": "سلام!", "createdAt": "2023-03-01T00:00:00.000Z" },
     ...
   ]
   ```
 
 #### **POST /api/chats/send**
-
 - **Description:** Send a chat message to a room. The message is broadcast via Socket.IO.
 - **Request Body:** (JSON)
   ```json
   {
     "room": "room123",
     "sender": "user_1",
-    "message": "Hello, how can I help you?"
+    "message": "سلام، چگونه می‌توانم کمکتان کنم؟"
   }
   ```
 - **Sample Response:**
@@ -880,7 +832,7 @@ This API provides a comprehensive set of endpoints for managing real estate prop
     "id": 1,
     "room": "room123",
     "sender": "user_1",
-    "message": "Hello, how can I help you?",
+    "message": "سلام، چگونه می‌توانم کمکتان کنم؟",
     "createdAt": "2023-03-01T00:00:00.000Z"
   }
   ```
@@ -890,12 +842,11 @@ This API provides a comprehensive set of endpoints for managing real estate prop
 ## 15. Advanced Reporting (Dashboard)
 
 ### **GET /api/reporting/advanced**
-
 - **Description:** Retrieve advanced analytical reports including:
   - **Conversion Rate:** Percentage of bookings with transaction type "direct_purchase".
-  - **Average Booking Price:** Average price of houses that have been booked.
+  - **Average Booking Price:** Average price of booked houses.
   - **Total Revenue:** Sum of prices for booked houses.
-  - **Booking Distribution:** Count of bookings grouped by the transaction type.
+  - **Booking Distribution:** Count of bookings grouped by transaction type.
   - **Heatmap Data:** Number of houses per location (grouped by area_name).
 - **Sample Request:**  
   `GET /api/reporting/advanced`
@@ -903,15 +854,15 @@ This API provides a comprehensive set of endpoints for managing real estate prop
   ```json
   {
     "conversionRate": "25.00%",
-    "avgBookingPrice": "1200.00",
-    "totalRevenue": "24000.00",
+    "avgBookingPrice": "1200000.00",
+    "totalRevenue": "24000000.00",
     "bookingDistribution": [
       { "transactionType": "direct_purchase", "count": 5 },
       { "transactionType": "rental", "count": 15 }
     ],
     "heatmapData": [
-      { "area_name": "Downtown", "houseCount": 10 },
-      { "area_name": "Uptown", "houseCount": 8 }
+      { "area_name": "تهران، منطقه مرکزی", "houseCount": 10 },
+      { "area_name": "اصفهان، منطقه تاریخی", "houseCount": 8 }
     ]
   }
   ```
@@ -921,18 +872,17 @@ This API provides a comprehensive set of endpoints for managing real estate prop
 ## 16. User Profile Management
 
 ### **PUT /api/users/profile/:id**
-
 - **Description:** Update a comprehensive user profile with additional details.
 - **URL Parameter:**  
-  - `id`: The user's unique identifier.
+  - `id`: User identifier.
 - **Request Body:** (JSON)
   ```json
   {
     "email": "newemail@example.com",
     "phone": "09123456789",
-    "address": "456 New Address",
-    "buyingHistory": ["House 1", "House 2"],
-    "sellingHistory": ["House 3"]
+    "address": "خیابان 456، تهران",
+    "buyingHistory": ["خانه ۱", "خانه ۲"],
+    "sellingHistory": ["خانه ۳"]
   }
   ```
 - **Sample Response:**
@@ -941,9 +891,9 @@ This API provides a comprehensive set of endpoints for managing real estate prop
     "id": 1,
     "email": "newemail@example.com",
     "phone": "09123456789",
-    "address": "456 New Address",
-    "buyingHistory": ["House 1", "House 2"],
-    "sellingHistory": ["House 3"],
+    "address": "خیابان 456، تهران",
+    "buyingHistory": ["خانه ۱", "خانه ۲"],
+    "sellingHistory": ["خانه ۳"],
     "updatedAt": "2023-04-01T00:00:00.000Z"
   }
   ```
@@ -953,30 +903,28 @@ This API provides a comprehensive set of endpoints for managing real estate prop
 ## 17. Recommendation System
 
 ### **GET /api/recommendations/:userId**
-
-- **Description:** Retrieve property recommendations for a user based on historical data, preferences, and buying behavior.  
+- **Description:** Retrieve property recommendations for a user based on historical data and behavior.
 - **URL Parameter:**  
-  - `userId`: The ID of the user for whom recommendations are generated.
-- **Scenario:** Provides intelligent suggestions for properties (this is a dummy implementation returning the top 5 cheapest houses).
+  - `userId`: The ID of the user.
+- **Usage Scenario:** Provide intelligent property suggestions (dummy implementation returns top 5 cheapest houses).
 - **Sample Response:**
   ```json
   {
     "userId": 5,
     "recommendations": [
-      { "id": 3, "title": "Affordable Apartment", "price": 900, ... },
+      { "id": 3, "title": "خانه اقتصادی", "price": 900000, ... },
       ...
     ]
   }
   ```
 
 ### **POST /api/recommendations/predict**
-
-- **Description:** Predict the price of a property based on its features using a (dummy) neural network model.
+- **Description:** Predict the price of a property based on its features.
 - **Request Body:** (JSON)
   ```json
   { "size": 120, "rooms": 3 }
   ```
-- **Scenario:** Helps users understand the expected price of a property based on given features.
+- **Usage Scenario:** Assist users with an estimated price prediction (dummy implementation using a simple formula).
 - **Sample Response:**
   ```json
   { "predictedPrice": 190000 }
@@ -987,19 +935,18 @@ This API provides a comprehensive set of endpoints for managing real estate prop
 ## 18. Gamification & Feedback
 
 ### **POST /api/feedback**
-
-- **Description:** Create a new feedback entry which combines review and loyalty points.
+- **Description:** Create a new feedback entry that includes a review and loyalty points.
 - **Request Body:** (JSON)
   ```json
   {
     "reviewerId": 2,
     "revieweeId": 3,
     "rating": 4.5,
-    "comment": "Great transaction!",
+    "comment": "معامله عالی بود!",
     "pointsAwarded": 10
   }
   ```
-- **Scenario:** A seller leaves feedback for a buyer, awarding loyalty points along with a rating and comment.
+- **Usage Scenario:** A user (e.g., seller) provides feedback for another user (e.g., buyer) and awards loyalty points.
 - **Sample Response:**
   ```json
   {
@@ -1007,22 +954,21 @@ This API provides a comprehensive set of endpoints for managing real estate prop
     "reviewerId": 2,
     "revieweeId": 3,
     "rating": 4.5,
-    "comment": "Great transaction!",
+    "comment": "معامله عالی بود!",
     "pointsAwarded": 10,
     "createdAt": "2023-03-01T00:00:00.000Z"
   }
   ```
 
 ### **GET /api/feedback/received/:userId**
-
-- **Description:** Retrieve all feedback received by a specific user along with the total loyalty points earned.
+- **Description:** Retrieve all feedback received by a user along with total loyalty points earned.
 - **URL Parameter:**  
   - `userId`: The ID of the user receiving feedback.
 - **Sample Response:**
   ```json
   {
     "feedbacks": [
-      { "id": 1, "rating": 4.5, "comment": "Great transaction!", "pointsAwarded": 10 },
+      { "id": 1, "rating": 4.5, "comment": "معامله عالی بود!", "pointsAwarded": 10 },
       ...
     ],
     "totalPoints": 10
@@ -1030,23 +976,21 @@ This API provides a comprehensive set of endpoints for managing real estate prop
   ```
 
 ### **GET /api/feedback/given/:userId**
-
-- **Description:** Retrieve all feedback submitted by a specific user.
+- **Description:** Retrieve all feedback submitted by a user.
 - **URL Parameter:**  
   - `userId`: The ID of the user who provided feedback.
 - **Sample Response:**
   ```json
   [
-    { "id": 1, "rating": 4.5, "comment": "Great transaction!", "pointsAwarded": 10 },
+    { "id": 1, "rating": 4.5, "comment": "معامله عالی بود!", "pointsAwarded": 10 },
     ...
   ]
   ```
 
 ### **GET /api/feedback/loyalty/:userId**
-
 - **Description:** Retrieve the total loyalty points accumulated by a user.
 - **URL Parameter:**  
-  - `userId`: The user's unique identifier.
+  - `userId`: The user’s unique identifier.
 - **Sample Response:**
   ```json
   { "userId": 3, "totalPoints": 25 }
@@ -1057,36 +1001,38 @@ This API provides a comprehensive set of endpoints for managing real estate prop
 ## Scenarios
 
 1. **User Registration & Login:**  
-   A new user signs up using the registration endpoint. After registration, the user logs in and receives an access token and a refresh token, which will be used for authenticated API requests.
+   A new user signs up via the registration endpoint and logs in to receive JWT tokens for authentication.
 
-2. **Property Browsing:**  
-   Users can browse properties with various filters (e.g., by price, address, transaction type) using the `/api/houses` endpoint. They can also perform advanced geo-search to locate properties within a specific radius.
+2. **Property Browsing & Advanced Search:**  
+   Users browse properties with various filters and sort options. They can use geo-search to find properties within a geographical radius or sort properties by average rating using `/api/houses/by-rating`.
 
-3. **Booking & Payment:**  
-   When a user makes a booking, they initiate a payment via `/api/payments/checkout`. After payment, the transaction is verified using `/api/payments/verify`, and the booking is updated accordingly.
+3. **Booking & Payment Processing:**  
+   When a user books a property, they initiate payment via `/api/payments/checkout`. After payment processing, the payment is verified with `/api/payments/verify` and booking status is updated accordingly.
 
-4. **Feedback & Loyalty:**  
-   After a transaction, a seller or buyer can leave feedback using the unified feedback endpoint. The system accumulates loyalty points based on the feedback, and users can view their total points and rewards through the loyalty endpoints.
+4. **Feedback & Loyalty System:**  
+   After transactions, users provide feedback (reviews and ratings) via `/api/feedback`. The system accumulates loyalty points which users can later view through `/api/feedback/received/:userId` or `/api/feedback/loyalty/:userId`.
 
-5. **Property Recommendations:**  
-   Based on user activity, the recommendation system provides suggestions for properties. The recommendation endpoint uses historical data and a dummy neural network model for price prediction.
+5. **Property Recommendations & Price Prediction:**  
+   Based on user behavior and historical data, the recommendation system suggests properties via `/api/recommendations/:userId` and provides price predictions using `/api/recommendations/predict`.
 
-6. **Real-time Interaction:**  
-   The API supports real-time notifications and chat. When a significant event occurs (e.g., booking confirmation or payment update), a notification is sent via Socket.IO. Users can also communicate through the chat endpoints.
+6. **Real-time Communication:**  
+   The API supports real-time notifications (via `/api/notifications/send`) and chat functionality (via `/api/chats/*`) to enable instant communication between users, such as between a buyer and seller.
 
-7. **Social Features:**  
-   Users can log in via social authentication (Facebook, Google, LinkedIn) and share properties or comments on social media using the sharing endpoints.
+7. **Social Integration:**  
+   Users can log in using their social accounts (Facebook, Google, LinkedIn) and share properties or comments via social sharing endpoints.
 
 8. **Advanced Reporting:**  
-   Admins can access detailed analytical reports on bookings, revenue, and property distribution using the advanced reporting endpoints.
+   Administrators can retrieve comprehensive analytical reports on bookings, revenue, and property distribution using `/api/reporting/advanced`.
 
 9. **User Profile Management:**  
-   Users have a public profile that displays non-sensitive information. They can update their profile using the dedicated endpoint to reflect changes in address, contact info, and history.
+   Users can update their public profiles via `/api/users/profile/:id` to reflect changes in contact information, address, and transaction history.
 
 10. **Gamification:**  
-    Users earn loyalty points based on their activities (e.g., leaving feedback, booking properties) which can later be redeemed for rewards, such as discounts on future bookings.
+    The combined feedback system allows users to earn loyalty points based on their activities (e.g., leaving feedback, making bookings) and view their accumulated points.
 
 ---
+
+This documentation provides a complete and detailed overview of all available API endpoints and usage scenarios for the Real Estate API. Frontend developers can refer to this guide to understand the functionalities and data flows in the system.
 
 This documentation covers all endpoints and scenarios in detail, providing a complete picture of how the API functions. Frontend developers can refer to this guide to understand the available resources and how to interact with the backend system effectively.
 
