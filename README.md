@@ -248,7 +248,7 @@ This API provides a comprehensive set of endpoints for managing real estate prop
   { "accessToken": "new_jwt_access_token" }
   ```
 
-### POST /api/auth/logout    ////// DELETED
+### POST /api/auth/logout
 - **Description:** Logs out the user by invalidating the refresh token.
 - **Request Body:** (JSON)
   ```json
