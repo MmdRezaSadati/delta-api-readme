@@ -197,7 +197,7 @@ This API provides a comprehensive set of endpoints for managing real estate prop
 
 ## 2. Users
 
-### POST /api/users/register
+### POST /api/auth/register
 - **Description:** Registers a new user with the default role "buyer". Any attempt to set a different role will be rejected.
 - **Request Body:** (JSON)
   ```json
@@ -221,7 +221,7 @@ This API provides a comprehensive set of endpoints for managing real estate prop
   }
   ```
 
-### POST /api/users/login
+### POST /api/auth/login
 - **Description:** Authenticates a user and returns JWT tokens.
 - **Request Body:** (JSON)
   ```json
@@ -248,7 +248,7 @@ This API provides a comprehensive set of endpoints for managing real estate prop
   { "accessToken": "new_jwt_access_token" }
   ```
 
-### POST /api/auth/logout
+### POST /api/auth/logout    ////// DELETED
 - **Description:** Logs out the user by invalidating the refresh token.
 - **Request Body:** (JSON)
   ```json
