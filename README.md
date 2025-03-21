@@ -1978,19 +1978,19 @@ This section provides a comprehensive overview of various user scenarios that ou
 
 - **Workflow:**
   1. **Registration:**  
-     - **Endpoint:** `POST /api/users/register`  
+     - **Endpoint:** `POST /api/auth/register`  
      - **Input:**  
-       - Required fields: `email`, `password`, `fullName`, `firstName`, `lastName`  
+       - Required fields: `email`, `password`,  `firstName`, `lastName`  
        - Role is hard-coded to `"buyer"`.
      - **Process:**  
        - The system validates the input. If any field is missing, it returns a 400 error.
        - Password is hashed using bcrypt.
        - A new user is created in the database with default values for optional fields (like profile picture).
      - **Output:**  
-       - A JSON object containing the user details (with an auto-generated `id` and default `profile_picture`).
+       - A JSON object containing the user details (with an auto-generated `id` ).
   
   2. **Login:**  
-     - **Endpoint:** `POST /api/users/login`  
+     - **Endpoint:** `POST /api/auth/login`  
      - **Input:**  
        - `email` and `password`.
      - **Process:**  
