@@ -1673,7 +1673,7 @@ These endpoints are organized into various categories to support all the feature
 
 ---
 
-## 12. Virtual Open House Scheduling
+## 19. Virtual Open House Scheduling
 
 ### POST /api/appointments
 - **Description:** Creates a new appointment for a property visit (virtual or in-person).
@@ -1752,7 +1752,7 @@ These endpoints are organized into various categories to support all the feature
 
 ---
 
-## 13. Seller Upgrade
+## 20. Seller Upgrade
 
 ### POST /api/users/upgrade-to-seller
 - **Description:** Initiates the seller upgrade process by creating a payment request. (Only authenticated users can initiate.)
@@ -1786,7 +1786,7 @@ These endpoints are organized into various categories to support all the feature
 
 ---
 
-## 14. Social Bookmark with Notes
+## 21. Social Bookmark with Notes
 
 ### POST /api/share/bookmark
 - **Description:** Saves a property to the user's wishlist with an optional personal note and generates a shareable URL.
@@ -1816,7 +1816,7 @@ These endpoints are organized into various categories to support all the feature
 
 ---
 
-## 15. Targeted Notifications
+## 22. Targeted Notifications
 
 ### POST /api/notifications/settings
 - **Description:** Creates a new targeted notification setting.
@@ -1903,7 +1903,7 @@ These endpoints are organized into various categories to support all the feature
 
 ---
 
-## 16. Recommendation System
+## 23. Recommendation System
 
 ### GET /api/recommendations/:userId
 - **Description:** Retrieves property recommendations for a user based on historical data.
@@ -1938,7 +1938,7 @@ These endpoints are organized into various categories to support all the feature
 
 ---
 
-## 17. User Activity Dashboard
+## 24. User Activity Dashboard
 
 ### GET /api/users/activity/:userId
 - **Description:** Retrieves activity data for a user, including:
@@ -1962,6 +1962,38 @@ These endpoints are organized into various categories to support all the feature
     "housesCreated": 2
   }
   ```
+
+---
+## Digital Document Management for Contracts
+
+This feature enables users (e.g., sellers) to upload and store digital documents such as PDF contracts and ownership documents for properties. Additionally, it provides the capability for digital signing using open-source tools. In our implementation, we use Multer to handle file uploads, store the document on the server, and then simulate digital signing using Node's crypto module (with a dummy private key for testing).
+
+### Endpoints Overview:
+- **POST /api/documents/upload**  
+  Upload a document for a property (e.g., contract or ownership document).  
+  **Required Body Fields:**  
+  - `houseId` (number): ID of the associated property  
+  - `documentType` (string): Type of document (e.g., "contract" or "ownership")  
+  - File upload: the document file (e.g., PDF) must be sent with the field name `"document"`.  
+  **Headers:**  
+  - `Authorization: Bearer <token>`  
+  **Usage Scenario:** Seller uploads a contract or property ownership document.
+  
+- **GET /api/documents/:id**  
+  Retrieve metadata for a specific document.  
+  **URL Parameter:**  
+  - `id`: Document ID  
+  **Headers:**  
+  - `Authorization: Bearer <token>`  
+  **Usage Scenario:** View details of an uploaded document.
+  
+- **POST /api/documents/:id/sign**  
+  Digitally sign a document.  
+  **URL Parameter:**  
+  - `id`: Document ID  
+  **Headers:**  
+  - `Authorization: Bearer <token>`  
+  **Usage Scenario:** After uploading, a user can trigger digital signing for the document. Upon success, the document’s record is updated with a signature and marked as signed.
 
 ---
 
