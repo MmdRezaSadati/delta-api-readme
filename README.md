@@ -208,14 +208,13 @@ These endpoints are organized into various categories to support all the feature
 
 ## 2. Users
 
-### POST /api/users/register
+### POST /api/auth/register
 - **Description:** Registers a new user with required fields. The role is hard-coded to "buyer".
 - **Request Body:** (JSON)
   ```json
   {
     "email": "user@example.com",
     "password": "securePassword",
-    "fullName": "علی کاربر",
     "firstName": "علی",
     "lastName": "کاربر"
   }
@@ -230,12 +229,11 @@ These endpoints are organized into various categories to support all the feature
     "fullName": "علی کاربر",
     "firstName": "علی",
     "lastName": "کاربر",
-    "profile_picture": "default_profile.jpg",
     "createdAt": "2023-01-01T00:00:00.000Z"
   }
   ```
 
-### POST /api/users/login
+### POST /api/auth/login
 - **Description:** Authenticates a user and returns JWT tokens.
 - **Request Body:** (JSON)
   ```json
