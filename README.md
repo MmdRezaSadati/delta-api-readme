@@ -1964,7 +1964,7 @@ These endpoints are organized into various categories to support all the feature
   ```
 
 ---
-## Digital Document Management for Contracts
+## 24. Digital Document Management for Contracts
 
 This feature enables users (e.g., sellers) to upload and store digital documents such as PDF contracts and ownership documents for properties. Additionally, it provides the capability for digital signing using open-source tools. In our implementation, we use Multer to handle file uploads, store the document on the server, and then simulate digital signing using Node's crypto module (with a dummy private key for testing).
 
