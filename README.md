@@ -1998,322 +1998,211 @@ This feature enables users (e.g., sellers) to upload and store digital documents
 ---
 
 
-## Scenarios Overview – Detailed Workflow and Use Cases
+# Scenarios Overview
 
-This section provides a comprehensive overview of various user scenarios that our Real Estate API supports. It outlines step-by-step workflows, the interactions between endpoints, and the expected behaviors for different use cases. Each scenario is designed to cover the full spectrum of functionality – from core actions (like property browsing, booking, and payment) to additional features (like feedback, notifications, and seller upgrades).
-
----
-
-### 1. User Registration & Login
-
-**Scenario: New User Registration and Authentication**
-
-- **Workflow:**
-  1. **Registration:**  
-     - **Endpoint:** `POST /api/auth/register`  
-     - **Input:**  
-       - Required fields: `email`, `password`,  `firstName`, `lastName`  
-       - Role is hard-coded to `"buyer"`.
-     - **Process:**  
-       - The system validates the input. If any field is missing, it returns a 400 error.
-       - Password is hashed using bcrypt.
-       - A new user is created in the database with default values for optional fields (like profile picture).
-     - **Output:**  
-       - A JSON object containing the user details (with an auto-generated `id` ).
-  
-  2. **Login:**  
-     - **Endpoint:** `POST /api/auth/login`  
-     - **Input:**  
-       - `email` and `password`.
-     - **Process:**  
-       - The system verifies the credentials.
-       - If credentials are valid, a JWT access token and a refresh token are issued.
-     - **Output:**  
-       - Tokens in JSON format.
-     - **Usage:**  
-       - These tokens are used in the `Authorization` header (`Bearer <token>`) for all protected endpoints.
+Below are the detailed user journeys (use cases) for each key feature of the real estate platform. This section is intended for the README, so it focuses on user-facing flows and narrative descriptions rather than implementation specifics.
 
 ---
 
-### 2. Property Browsing & Search
+## 1. Property Browsing & Filtering
+**Goal:** Allow visitors to quickly find suitable properties.
 
-**Scenario: User Browses Properties**
+**User Flow:**
+1. Land on the **Property Listings** page.
+2. Apply filters such as:
+   - Price range
+   - Number of bedrooms/bathrooms
+   - Capacity (guest count)
+   - Transaction type (rental, purchase, reservation)
+   - Tags (e.g., "luxury", "family-friendly")
+3. Sort results by criteria like price, rating, or date listed.
+4. Navigate pages via pagination controls (set page size, go to next/previous).
+5. Observe that the list updates live as filters or sorting options change.
 
-- **Workflow:**
-  1. **Listing Properties:**  
-     - **Endpoint:** `GET /api/houses`  
-     - **Input:**  
-       - Optional query parameters for pagination (`page`, `limit`), sorting (`sort`, `order`), and filtering (e.g., `transaction_type`, `price`, etc.).
-     - **Process:**  
-       - The system fetches property records from the database based on the given filters.
-     - **Output:**  
-       - A paginated list of properties in JSON format.
-  
-  2. **Viewing Property Details:**  
-     - **Endpoint:** `GET /api/houses/:id`  
-     - **Input:**  
-       - Property `id` as URL parameter.
-     - **Process:**  
-       - Retrieves full details of the selected property (including photos, caption, and seller information).
-     - **Output:**  
-       - Detailed property information in JSON format.
-  
-  3. **Geo-Search:**  
-     - **Endpoint:** `GET /api/houses/geo-search`  
-     - **Input:**  
-       - `lat`, `lng`, `radius` as query parameters.
-     - **Process:**  
-       - The system uses geographic functions to return properties within the specified radius.
-     - **Output:**  
-       - A list of nearby properties.
+**Outcome:** Users can rapidly narrow down hundreds of listings to the handful that match their preferences.
 
 ---
 
-### 3. Booking & Payment Processing
+## 2. Property Details Viewing
+**Goal:** Present all relevant information about a single property in one place.
 
-**Scenario: User Books a Property and Completes Payment**
+**User Flow:**
+1. Click on a property from the listing.
+2. View the **Property Details** page featuring:
+   - High-res photo gallery with navigation controls.
+   - Comprehensive description (text caption) and yard type.
+   - Amenities list populated from the property’s accommodations.
+   - Interactive map showing exact location.
+   - Seller profile: name, photo, contact badge.
+   - Current price, average rating, total reviews count, transaction type.
 
-- **Workflow:**
-  1. **Creating a Booking:**  
-     - **Endpoint:** `POST /api/bookings`  
-     - **Input:**  
-       - `houseId`, `reservedDates` (as a date range), and `traveler_details` (an array of passenger objects with fields like `firstName`, `lastName`, `gender`, `birthDate`, `nationalId`).
-       - Optional: `sharedEmail` and `sharedMobile` for ticket sharing.
-     - **Process:**  
-       - The booking is created with a default status `"pending"`.
-     - **Output:**  
-       - The new booking object is returned in JSON.
-  
-  2. **Initiating Payment:**  
-     - **Endpoint:** `POST /api/payments/checkout`  
-     - **Input:**  
-       - `bookingId` and `amount`.
-     - **Process:**  
-       - The system generates a payment request and returns an authority code and payment URL.
-     - **Output:**  
-       - Payment details in JSON.
-  
-  3. **Verifying Payment:**  
-     - **Endpoint:** `POST /api/payments/verify`  
-     - **Input:**  
-       - `authority`, `status` (e.g., "OK"), and `bookingId`.
-     - **Process:**  
-       - If the payment status is confirmed (e.g., "OK"), the system updates the booking status to `"confirmed"`.
-       - At this point, if `sharedEmail` or `sharedMobile` is provided in the booking, a ticket is sent via email and SMS (using the TicketNotificationService).
-     - **Output:**  
-       - Confirmation message and updated booking status.
-  
-  4. **Canceling or Continuing a Booking:**  
-     - **Cancel:**  
-       - **Endpoint:** `POST /api/bookings/:id/cancel`
-       - **Process:**  
-         - Changes booking status from `"pending"` to `"canceled"`.
-       - **Output:**  
-         - Cancellation confirmation.
-     - **Continue:**  
-       - **Endpoint:** `POST /api/bookings/:id/continue`
-       - **Process:**  
-         - Changes status from `"canceled"` back to `"pending"`.
-       - **Output:**  
-         - Updated booking status confirmation.
+**Outcome:** Users gain full confidence in a property’s features before proceeding to book or inquire.
 
 ---
 
-### 4. Feedback, Ratings & Q&A
+## 3. Comments & Ratings
+**Goal:** Collect and display user feedback to build trust.
 
-**Scenario: User Provides Feedback and Asks/Answers Questions**
+**User Flow:**
+1. On a property’s detail page, scroll to **Reviews**.
+2. Submit a new review with:
+   - Star rating (1 to 5)
+   - Text comment
+3. Edit or delete your own reviews at any time.
+4. See updated average rating and total reviews instantly reflected.
 
-- **Feedback:**  
-  - **Endpoint:** `POST /api/feedback`  
-  - **Input:**  
-    - `reviewerId`, `revieweeId`, `rating`, `comment`, and `pointsAwarded`.
-  - **Process:**  
-    - A feedback entry is created, contributing to the loyalty system.
-  - **Output:**  
-    - Feedback details.
-  
-- **Q&A:**  
-  - **Ask Question:**  
-    - **Endpoint:** `POST /api/property-qas/question`  
-    - **Input:**  
-      - `houseId` and `question`.
-    - **Process:**  
-      - The question is recorded.
-    - **Output:**  
-      - Question details.
-  - **Answer Question:**  
-    - **Endpoint:** `POST /api/property-qas/answer`  
-    - **Input:**  
-      - `questionId` and `answer`.
-    - **Process:**  
-      - The answer is saved and linked to the question.
-    - **Output:**  
-      - Updated Q&A details.
-  - **Retrieve Q&A:**  
-    - **Endpoint:** `GET /api/property-qas/:houseId`  
-    - **Process:**  
-      - All questions and answers for the property are returned.
-    - **Output:**  
-      - List of Q&A entries.
+**Outcome:** Transparent, community-driven ratings help new users make informed decisions.
 
 ---
 
-### 5. Price History Tracking
+## 4. Online Property Booking
+**Goal:** Enable seamless reservation of properties.
 
-**Scenario: User Analyzes Historical Price Data for a Property**
+**User Flow:**
+1. Select check-in and check-out dates via a calendar widget.
+2. Enter **traveler details** for each guest (array of objects):
+   - First name, last name
+   - Gender
+   - Date of birth
+   - National ID number
+3. Optionally share the reservation (booking ticket) by entering a third party’s email or phone number.
+4. Submit the booking, which is initially marked **"Pending Payment"**.
 
-- **Retrieve Full Price History:**  
-  - **Endpoint:** `GET /api/price-history/:houseId`
-  - **Process:**  
-    - The system returns a chronological list of recorded price changes.
-  - **Output:**  
-    - Price history records with timestamps.
-  
-- **Monthly Percentage Changes:**  
-  - **Endpoint:** `GET /api/price-history/:houseId/monthly-changes`
-  - **Process:**  
-    - The system calculates and returns the percentage change in price for each month.
-  - **Output:**  
-    - A list of monthly changes with percentage values.
+**Outcome:** Accurate guest data capture and shareable booking with clear status.
 
 ---
 
-### 6. Social Authentication & Sharing
+## 5. Payment Processing & Confirmation
+**Goal:** Integrate secure online payments and status updates.
 
-**Scenario: User Logs in via Social Platforms and Shares Content**
+**User Flow:**
+1. After booking submission, redirect to the integrated payment gateway.
+2. Complete payment. On success:
+   - Booking status changes to **"Confirmed"**.
+   - Email and SMS notifications sent to booker and seller.
+3. If payment is abandoned:
+   - User sees **"Pending Payment"** bookings in dashboard.
+   - Options to **Resume** or **Cancel** the reservation.
 
-- **Social Authentication:**  
-  - **Endpoints:**  
-    - `/api/auth/social/facebook` and `/api/auth/social/facebook/callback`
-    - `/api/auth/social/google` and `/api/auth/social/google/callback`
-    - `/api/auth/social/linkedin` and `/api/auth/social/linkedin/callback`
-  - **Process:**  
-    - User is redirected to the social platform for authentication.
-    - Upon successful authentication, a JWT token is issued.
-  
-- **Social Sharing:**  
-  - **Endpoints:**  
-    - `GET /api/share/property` – Generates a shareable URL for a property.
-    - `GET /api/share/comment` – Generates a shareable URL for a comment.
-  - **Usage Scenario:**  
-    - Users share property or comment details on social media.
-  - **Output:**  
-    - A URL for sharing.
+**Outcome:** Reliable payment flow with immediate feedback and recovery options.
 
 ---
 
-### 7. Virtual Open House Scheduling
+## 6. Seller Booking Management
+**Goal:** Give property owners control over incoming reservations.
 
-**Scenario: User Schedules a Property Visit**
+**User Flow:**
+1. Seller logs into their **Seller Dashboard**.
+2. View a list of bookings for all owned properties, including:
+   - Traveler details
+   - Payment status
+   - Booking dates
+3. Perform actions:
+   - **Confirm** a pending booking.
+   - **Cancel** an existing booking.
+   - **Reinstate** a canceled booking.
+4. Receive real-time notifications on each change.
 
-- **Creating an Appointment:**  
-  - **Endpoint:** `POST /api/appointments`
-  - **Input:**  
-    - `houseId`, `appointmentTime`, and `type` (either "virtual" or "in_person").
-  - **Process:**  
-    - An appointment is created with status `"pending"`.
-  - **Output:**  
-    - Appointment details.
-  
-- **Retrieving Appointments:**  
-  - **For a Property:** `GET /api/appointments/house/:houseId`
-  - **For the Authenticated User:** `GET /api/appointments/user`
-  - **Usage Scenario:**  
-    - Users view scheduled appointments to plan their visits.
-  
-- **Updating/Deleting Appointments:**  
-  - **Endpoint for Update:** `PUT /api/appointments/:id`
-  - **Endpoint for Delete:** `DELETE /api/appointments/:id`
-  - **Process:**  
-    - Users can modify or cancel appointments as needed.
-  - **Output:**  
-    - Confirmation messages and updated appointment details.
+**Outcome:** Efficient reservation oversight with full audit trail.
 
 ---
 
-### 8. Seller Upgrade
+## 7. Targeted Notifications
+**Goal:** Keep users informed of market changes that match their criteria.
 
-**Scenario: User Upgrades to Seller**
+**User Flow:**
+1. In **Notification Settings**, define custom rules such as:
+   - Price drop below X amount
+   - New listings in selected neighborhoods or tags
+2. System checks these rules at regular intervals.
+3. When conditions are met, dispatch notifications via Push, Email, or SMS.
 
-- **Initiating Upgrade:**  
-  - **Endpoint:** `POST /api/users/upgrade-to-seller`
-  - **Process:**  
-    - The system creates a payment request for the seller upgrade fee.
-  - **Output:**  
-    - Payment details including an authority code and a payment URL.
-  
-- **Verifying Upgrade Payment:**  
-  - **Endpoint:** `POST /api/users/upgrade-to-seller/verify`
-  - **Input:**  
-    - `authority` and `status` (e.g., "OK").
-  - **Process:**  
-    - Upon successful verification, the user's role is updated to `"seller"`.
-  - **Output:**  
-    - Confirmation message indicating the upgrade success.
+**Outcome:** Proactive alerts keep users engaged and ahead of market movements.
 
 ---
 
-### 9. Social Bookmark with Notes
+## 8. Saved Searches & Favorites Management
+**Goal:** Streamline repeat browsing sessions.
 
-**Scenario: User Bookmarks a Property for Sharing**
+**User Flow:**
+1. After setting filters, click **Save Search** and (optionally) add personal notes.
+2. On any property, click **Favorite** to bookmark it.
+3. Manage all saved searches and favorites in one dashboard section:
+   - Edit notes
+   - Delete entries
+   - Quickly load saved filters or view favorites list
 
-- **Creating a Bookmark:**  
-  - **Endpoint:** `POST /api/share/bookmark`
-  - **Input:**  
-    - `houseId` and `note` (a personal note about the property).
-  - **Process:**  
-    - The property is saved to the user's wishlist with the note.
-    - A shareable URL is generated that includes the bookmark note as a query parameter.
-  - **Output:**  
-    - Bookmark details and the shareable URL.
-
----
-
-### 10. Targeted Notifications
-
-**Scenario: User Sets Up Targeted Notification Preferences**
-
-- **Creating Notification Settings:**  
-  - **Endpoint:** `POST /api/notifications/settings`
-  - **Input:**  
-    - `notificationType` (e.g., "price_drop") and `criteria` (e.g., `{ "priceThreshold": 1000000 }`).
-  - **Process:**  
-    - The setting is saved, linking the criteria with the user.
-  - **Output:**  
-    - Notification setting details.
-  
-- **Retrieving, Updating, and Deleting Settings:**  
-  - **Endpoints:**  
-    - `GET /api/notifications/settings`
-    - `PUT /api/notifications/settings/:id`
-    - `DELETE /api/notifications/settings/:id`
-  - **Usage Scenario:**  
-    - Users can view and manage their notification preferences.
-  
-- **Sending Scheduled Notifications:**  
-  - **Endpoint:** `POST /api/notifications/send-scheduled`
-  - **Process:**  
-    - A background job (or manual trigger) sends notifications based on the saved settings.
-  - **Output:**  
-    - Confirmation message with a list of settings processed.
+**Outcome:** Personalized workspace for quick access to important listings.
 
 ---
 
-### 11. User Activity Dashboard
+## 9. Personalized Recommendations
+**Goal:** Tailor property suggestions to each user’s behavior.
 
-**Scenario: User or Admin Reviews Activity Data**
+**User Flow:**
+1. In **Recommendations**, view properties selected by the system based on:
+   - Past searches
+   - Booking history
+   - Favorited items
+2. Use the **Price Prediction** tool:
+   - Enter features (size, rooms)
+   - Receive an estimated market price
 
-- **Endpoint:** `GET /api/users/activity/:userId`
-- **Process:**  
-  - Retrieves aggregated activity data for the specified user:
-    - **Booking Count:** Total number of bookings made.
-    - **Feedback Given:** Count of feedback entries submitted.
-    - **Feedback Received:** Count of feedback entries received.
-    - **Properties Created:** Total properties listed by the user (if seller).
-- **Usage Scenario:**  
-  - Users can view their activity summary; admins can monitor user engagement.
-- **Output:**  
-  - A JSON object containing the aggregated counts.
+**Outcome:** Intelligent guidance enhances discovery and confidence.
+
+---
+
+## 10. Price History Tracking
+**Goal:** Provide transparency on market trends.
+
+**User Flow:**
+1. On a property page, open **Price History** section.
+2. View interactive charts spanning:
+   - Monthly intervals
+   - Quarterly intervals
+   - Annual trends
+3. Compare graphs side-by-side for multiple properties or neighborhoods.
+
+**Outcome:** Data-driven insights into how prices have evolved over time.
+
+---
+
+## 11. Maintenance Request Workflow
+**Goal:** Streamline property maintenance communications.
+
+**User Flow:**
+1. Tenant or owner opens **Maintenance Requests**.
+2. Submit a new ticket with:
+   - Property reference
+   - Description of the issue
+3. Track progress through statuses: **Pending → In Progress → Completed**.
+4. Review a timestamped audit trail of each status change.
+
+**Outcome:** Clear, accountable workflow for all property repairs.
+
+---
+
+## 12. Digital Contract & Document Management
+**Goal:** Centralize and secure property documentation.
+
+**User Flow:**
+1. Upload PDFs (rental agreements, deeds) under **Documents**.
+2. Preview files in-browser and organize them by property.
+3. Apply digital signatures via integrated e-sign API or open-source tool.
+
+**Outcome:** Simplified contract handling, easy sharing, and legal compliance.
+
+---
+
+## 13. Real-Time Internal Messaging
+**Goal:** Facilitate instant, secure communication.
+
+**User Flow:**
+1. Access **Messages** to start a chat with buyers, sellers, or support.
+2. Exchange text and file attachments (images, docs).
+3. All conversations persist in the user’s message history.
+
+**Outcome:** Built-in, platform-native chat eliminates external dependencies.
 
 ---
 
